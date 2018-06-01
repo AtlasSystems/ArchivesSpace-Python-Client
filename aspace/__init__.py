@@ -4,4 +4,3 @@ the ArchivesSpace API, version 2.X.
 """
 
 from .client import ASpaceClient
-from .functions import *
