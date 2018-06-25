@@ -9,5 +9,3 @@ class RecordPages(object):
 
     def __init__(self, client: ASpaceClient):
         self._client = client
-
-    def
