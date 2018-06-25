@@ -3,6 +3,9 @@ from requests.sessions import Session
 import urllib.parse
 import json
 
+import aspace._client_extensions as extensions
+
+
 class ASpaceClient(Session):
     """
     Wraps the Session class from the requests Python library, configured
@@ -17,6 +20,9 @@ class ASpaceClient(Session):
         self.aspace_password = password
         self.headers['Accept'] = 'application/json'
         self.authenticate()
+
+        self.record_stream = extensions.RecordStream(self)  # RecordStream
+        self.get_paginaged = extensions.RecordPages(self)  # RecordPages
 
     def prepare_request(self, request: Request):
         """
