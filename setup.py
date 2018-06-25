@@ -8,7 +8,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='ArchivesSpace-Python-Client',
+    name='aspace-client',
     version='0.1.0',
     description='Provides methods and classes that can be used when interacting with the ArchivesSpace API.',
     long_description=long_description,
@@ -36,7 +36,6 @@ setup(
     install_requires=[
         'requests>=2.18,<3',
         'urllib3>=1.19,<2',
-
     ],
 
     package_data={},
