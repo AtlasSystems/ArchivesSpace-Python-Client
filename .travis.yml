@@ -6,7 +6,5 @@ python:
   - "3.5-dev"  # 3.5 development branch
   - "3.6"
 
-before
-
 install:
   - pip install .
