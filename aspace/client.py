@@ -24,11 +24,11 @@ class ASpaceClient(BaseASpaceClient):
 
     def stream_records(self):
         """
-        Initializes an instance of the RecordStream extension class, providing
+        Initializes an instance of the RecordStreams extension class, providing
         methods that allow records to be streamed from ArchivesSpace.
         """
 
-        return extensions.RecordStream(self)
+        return extensions.RecordStreams(self)
 
     def manage_users(self):
         """

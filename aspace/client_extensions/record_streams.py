@@ -3,7 +3,7 @@ import re
 from aspace import BaseASpaceClient
 
 
-class RecordStream(object):
+class RecordStreams(object):
     """
     Contains methods that can be used to stream all records from an instance
     of ArchivesSpace of a particular record type.

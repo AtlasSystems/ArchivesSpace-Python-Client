@@ -1,4 +1,4 @@
-from . import RecordStream
+from . import RecordStreams
 
 from aspace import BaseASpaceClient
 
@@ -11,7 +11,7 @@ class UserManagement(object):
 
     def __init__(self, client: BaseASpaceClient):
         self._client = client
-        self._record_stream = RecordStream(client)
+        self._record_streams = RecordStreams(client)
 
     def all_user_records(self) -> list:
         """
@@ -20,15 +20,15 @@ class UserManagement(object):
         """
         return [
             _user for _user in
-            self._record_stream.users()
+            self._record_streams.users()
         ]
 
     def stream_user_records(self) -> iter:
         """
         Streams all non-system user records from the ArchivesSpace instance.
-        Please see the RecordStream extensions for other streaming methods.
+        Please see the RecordStreams extensions for other streaming methods.
         """
-        return self._record_stream.users()
+        return self._record_streams.users()
 
     def change_all_passwords(self, new_password: str) -> list:
         """
@@ -54,7 +54,7 @@ class UserManagement(object):
                 params={'password': new_password}
             ).json()
 
-            for user in self._record_stream.users()
+            for user in self._record_streams.users()
 
             # Don't update any system users, unless they are 'admin'
             if (user.get('is_admin') or not user.get('is_system_user'))

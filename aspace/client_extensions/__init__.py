@@ -10,6 +10,6 @@ of utilities included in this package are
 These components can be accessed through the ASpaceClient class.
 """
 
-from .record_stream import RecordStream
+from .record_streams import RecordStreams
 from .record_pages import RecordPages
 from .user_management import UserManagement
