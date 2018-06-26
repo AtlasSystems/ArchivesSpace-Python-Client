@@ -1,4 +1,4 @@
-from .. import BaseASpaceClient
+from aspace import BaseASpaceClient
 
 
 class RecordPages(object):

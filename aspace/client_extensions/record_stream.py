@@ -1,6 +1,6 @@
 import re
 
-from .. import BaseASpaceClient
+from aspace import BaseASpaceClient
 
 
 class RecordStream(object):
@@ -54,7 +54,7 @@ class RecordStream(object):
             self._client.get(rec_uri).json()
 
             for rec_id in self._client.get(
-                '/%s?all_ids=true' % plural_record_type)
+                '/%s?all_ids=true' % plural_record_type).json()
 
             for rec_uri in ['/%s/%d' % (plural_record_type, rec_id)]
         )
