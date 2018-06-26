@@ -32,24 +32,30 @@ class UserManagement(object):
 
     def change_all_passwords(self, new_password: str) -> list:
         """
-        Changes the passwords for all of the users in the ArchivesSpace instance:
+        Changes the passwords for all of the users in the ArchivesSpace 
+        instance:
         
         - incuding the admin user
         - not including the system users.
 
         Returns a list of all of the responses from the API.
         """
-        if (new_password is None or len(new_password) == 0 or new_password.isspace()):
+
+        invalid = new_password is None
+        invalid = invalid or len(new_password) == 0
+        invalid = invalid or new_password.isspace()
+
+        if invalid:
             raise ValueError('A new password must be specified.')
 
         return [
             self._client.post(
                 user['uri'], json=user,
-                params={'password':new_password}
-            )
+                params={'password': new_password}
+            ).json()
 
             for user in self._record_stream.users()
-            
-            if ((not user['is_system_user']) or 
-                user['username'].lower() == 'admin')
+
+            # Don't update any system users, unless they are 'admin'
+            if (user.get('is_admin') or not user.get('is_system_user'))
         ]
