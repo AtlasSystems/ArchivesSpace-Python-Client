@@ -29,3 +29,11 @@ class ASpaceClient(BaseASpaceClient):
         """
 
         return extensions.RecordStream(self)
+
+    def user_management(self):
+        """
+        Initializes an instance of the UserManagement extension class, 
+        providing methods that allow batch updates for user records.
+        """
+
+        return extensions.UserManagement(self)

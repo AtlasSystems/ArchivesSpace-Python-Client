@@ -12,3 +12,4 @@ These components can be accessed through the ASpaceClient class.
 
 from .record_stream import RecordStream
 from .record_pages import RecordPages
+from .user_management import UserManagement

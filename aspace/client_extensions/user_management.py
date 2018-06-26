@@ -1,0 +1,55 @@
+from . import RecordStream
+
+from aspace import BaseASpaceClient
+
+
+class UserManagement(object):
+    """
+    Contains methods that can be used to perform batch updates on user records
+    using different components of the ArchivesSpace API.
+    """
+
+    def __init__(self, client: BaseASpaceClient):
+        self._client = client
+        self._record_stream = RecordStream(client)
+
+    def all_user_records(self) -> list:
+        """
+        Dowloads a list of all of the non-system user records in the
+        ArchivesSpace instance.
+        """
+        return [
+            _user for _user in
+            self._record_stream.users()
+        ]
+
+    def stream_user_records(self) -> iter:
+        """
+        Streams all non-system user records from the ArchivesSpace instance.
+        Please see the RecordStream extensions for other streaming methods.
+        """
+        return self._record_stream.users()
+
+    def change_all_passwords(self, new_password: str) -> list:
+        """
+        Changes the passwords for all of the users in the ArchivesSpace instance:
+        
+        - incuding the admin user
+        - not including the system users.
+
+        Returns a list of all of the responses from the API.
+        """
+        if (new_password is None or len(new_password) == 0 or new_password.isspace()):
+            raise ValueError('A new password must be specified.')
+
+        return [
+            self._client.post(
+                user['uri'], json=user,
+                params={'password':new_password}
+            )
+
+            for user in self._record_stream.users()
+            
+            if ((not user['is_system_user']) or 
+                user['username'].lower() == 'admin')
+        ]
