@@ -1,5 +1,7 @@
-"""
-This package contains methods and classes that target ArchivesSpace's v2.X API,
+r"""
+This package contains methods and classes that target ArchivesSpace's v2.X 
+API.
 """
 
-from ._client import ASpaceClient
+from .base_client import BaseASpaceClient
+from .client import ASpaceClient

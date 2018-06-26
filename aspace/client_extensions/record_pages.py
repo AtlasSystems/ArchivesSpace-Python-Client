@@ -1,4 +1,4 @@
-from aspace import ASpaceClient
+from .. import BaseASpaceClient
 
 
 class RecordPages(object):
@@ -7,5 +7,5 @@ class RecordPages(object):
     API endpoints that support pagination
     """
 
-    def __init__(self, client: ASpaceClient):
+    def __init__(self, client: BaseASpaceClient):
         self._client = client

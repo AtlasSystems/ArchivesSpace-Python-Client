@@ -1,15 +1,15 @@
-from requests import Request
-from requests.sessions import Session
-import urllib.parse
-import json
+r"""
+Contains the BaseASpaceClient class.
+"""
 
-import aspace._client_extensions as extensions
+import requests
+import urllib
 
 
-class ASpaceClient(Session):
+class BaseASpaceClient(requests.Session):
     """
-    Wraps the Session class from the requests Python library, configured
-    specifically for interacting with the ArchivesSpace API.
+    Extends the Session class from the requests Python library, adding
+    methods that relate to 
     """
 
     def __init__(self, api_host='http://localhost:8089',
@@ -19,12 +19,8 @@ class ASpaceClient(Session):
         self.aspace_username = username
         self.aspace_password = password
         self.headers['Accept'] = 'application/json'
-        self.authenticate()
 
-        self.record_stream = extensions.RecordStream(self)  # RecordStream
-        self.get_paginaged = extensions.RecordPages(self)  # RecordPages
-
-    def prepare_request(self, request: Request):
+    def prepare_request(self, request: requests.Request):
         """
         Overrides and extends the `prepare_request` function from
         `requests.sessions.Session`.
@@ -38,7 +34,7 @@ class ASpaceClient(Session):
         Authenticates the ArchivesSpace API client and sets up the
         X-ArchivesSpace-Session header for future requests. Returns
         the JSON response if the login was valid. Raises an error
-        if the HTTP status code was not 200.
+        if the HTTP status code was not in the 200 series.
         """
 
         resp = self.post(
@@ -47,9 +43,11 @@ class ASpaceClient(Session):
         )
 
         if resp.status_code != 200:
-            raise 'Error while logging in, error code: ' + resp.status_code
+            raise ValueError(
+                'Received %d while attempting to authenticate: %s' %
+                (resp.status_code, resp.text)
+            )
 
         session = resp.json()['session']
-
         self.headers['X-ArchivesSpace-Session'] = session
         return resp

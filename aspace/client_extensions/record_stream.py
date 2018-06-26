@@ -1,6 +1,6 @@
 import re
 
-from aspace import ASpaceClient
+from .. import BaseASpaceClient
 
 
 class RecordStream(object):
@@ -9,7 +9,7 @@ class RecordStream(object):
     of ArchivesSpace of a particular record type.
     """
 
-    def __init__(self, client: ASpaceClient):
+    def __init__(self, client: BaseASpaceClient):
         self._client = client
 
     def repositories(self):
@@ -32,15 +32,15 @@ class RecordStream(object):
             [repo['uri'] for repo in self.repositories()]
         )
 
-        # Validate repository URIs
+        def invalid_repo_uri(repo_uri):
+            return not re.match(r'/repositories/\d+', repo_uri)
 
-        def is_invalid_uri(repo_uri): return (
-            repo_uri is not str or
-            not re.match(r'/repositories/\d+', repo_uri)
-        )
+        if any(filter(lambda uri: uri is not str, repo_uris)):
+            raise TypeError('All repository uris must be strings')
 
-        if any(filter(is_invalid_uri, repo_uris)):
-            raise r"Repository URIs must be of the form '/repositories/\d+'"
+        if any(filter(invalid_repo_uri, repo_uris)):
+            raise ValueError(r'All Repository URIs must be of the form \
+            "/repositories/\d+"')
 
         return repo_uris
 
