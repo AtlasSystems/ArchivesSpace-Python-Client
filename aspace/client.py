@@ -14,7 +14,7 @@ class ASpaceClient(BaseASpaceClient):
     API.
     """
 
-    def record_pages(self):
+    def page_records(self):
         """
         Initializes an instance of the RecordPages extension class, providing
         methods that allow records to be paged from ArchivesSpace.
@@ -22,7 +22,7 @@ class ASpaceClient(BaseASpaceClient):
 
         return extensions.RecordPages(self)
 
-    def record_stream(self):
+    def stream_records(self):
         """
         Initializes an instance of the RecordStream extension class, providing
         methods that allow records to be streamed from ArchivesSpace.
@@ -30,7 +30,7 @@ class ASpaceClient(BaseASpaceClient):
 
         return extensions.RecordStream(self)
 
-    def user_management(self):
+    def manage_users(self):
         """
         Initializes an instance of the UserManagement extension class, 
         providing methods that allow batch updates for user records.
