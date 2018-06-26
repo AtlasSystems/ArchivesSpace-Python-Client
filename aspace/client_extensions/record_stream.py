@@ -44,7 +44,7 @@ class RecordStream(object):
 
         return repo_uris
 
-    def stream_records(self, plural_record_type: str,):
+    def records(self, plural_record_type: str,):
         """
         Streams all records of a specific type from the ArchivesSpace instance,
         assuming that a `/:plural_record_type` endpoint exists, and supports
@@ -59,8 +59,8 @@ class RecordStream(object):
             for rec_uri in ['/%s/%d' % (plural_record_type, rec_id)]
         )
 
-    def stream_repository_records(self, plural_record_type: str,
-                                  repository_uris: list = None,):
+    def repository_records(self, plural_record_type: str,
+                           repository_uris: list = None,):
         """
         Streams all records of a specific type from the ArchivesSpace instance,
         assuming that a `/repositories/:repo_id/:plural_record_type` endpoint
@@ -98,7 +98,7 @@ class RecordStream(object):
         all repositories.
         """
 
-        return self.stream_repository_records(
+        return self.repository_records(
             plural_record_type='resources',
             repository_uris=repository_uris,
         )
@@ -112,7 +112,7 @@ class RecordStream(object):
         all repositories.
         """
 
-        return self.stream_repository_records(
+        return self.repository_records(
             plural_record_type='archival_objects',
             repository_uris=repository_uris,
         )
@@ -121,7 +121,7 @@ class RecordStream(object):
         """
         Streams all user records from the ArchivesSpace instance.
         """
-        return self.stream_records('users')
+        return self.records('users')
 
     def agents(self, plural_agent_type: str):
         """
@@ -130,7 +130,7 @@ class RecordStream(object):
 
         `:plural_agent_type:` The desired type of agent
         """
-        return self.stream_records('agents/%s' % plural_agent_type)
+        return self.records('agents/%s' % plural_agent_type)
 
     def people(self):
         """
