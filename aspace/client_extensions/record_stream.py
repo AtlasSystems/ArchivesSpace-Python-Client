@@ -35,7 +35,7 @@ class RecordStream(object):
         def invalid_repo_uri(repo_uri):
             return not re.match(r'/repositories/\d+', repo_uri)
 
-        if any(filter(lambda uri: uri is not str, repo_uris)):
+        if any(filter(lambda uri: type(uri) is not str, repo_uris)):
             raise TypeError('All repository uris must be strings')
 
         if any(filter(invalid_repo_uri, repo_uris)):
