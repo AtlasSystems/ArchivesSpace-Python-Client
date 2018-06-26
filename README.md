@@ -19,11 +19,34 @@ migrations, as well as supporting and researching aspects related to those
 ArchivesSpace migrations.
 
 
+## Installation
+
+This project is currently in development and does not yet exist on PyPi.
+Install this package into your virtual environment by cloning this repository
+and installing the package in editable mode.
+
+```bash
+AS_CLIENT_DIR="/path/to/aspace-python-client"
+git clone https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git "$AS_CLIENT_DIR"
+
+# In your python project directory, or in your venv
+pip install -e "$AS_CLIENT_DIR"
+```
+
+
 ## Contributing
 
 If you have any suggestions or bug reports please feel free to report them in
-the issues tab or email me at [schaffer.austin.t@gmail.com](mailto:schaffer.austin.t@gmail.com).
+[the issues tab](https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/issues) 
+or email me at [schaffer.austin.t@gmail.com](mailto:schaffer.austin.t@gmail.com).
 
-Please note that pull requests are welcome, but will subject to a review
-process. Please . Also, please feel free to call me out on anything currently
-in this package that does not conform to any style guide.
+Pull requests are welcome, but they will subject to a review process.
+Consistent code style is a goal for this project, as it currently 
+attemps to follow the coding standards layed out in the 
+[PEP8 Python style guide](https://www.python.org/dev/peps/pep-0008/).
+Please keep this in mind when submitting or requesting contributions,
+but also keep in mind that PEP is a flexible standard and that I'm 
+willing to make exceptions.
+
+Also, please feel free to call me out on anything currently in this 
+package that is poorly styled or just generally bad code.
