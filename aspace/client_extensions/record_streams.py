@@ -51,33 +51,45 @@ class RecordStreams(object):
         the `all_ids=true` parameter.
         """
         return (
-            self._client.get(rec_uri).json()
+            self._client.get(
+                '/%s/%d' % (plural_record_type, rec_id)
+            ).json()
 
             for rec_id in self._client.get(
-                '/%s?all_ids=true' % plural_record_type).json()
-
-            for rec_uri in ['/%s/%d' % (plural_record_type, rec_id)]
+                '/%s?all_ids=true' % plural_record_type
+            ).json()
         )
 
     def repository_records(self, plural_record_type: str,
-                           repository_uris: list = None,):
+                           repository_uris: list = None,
+                           endpoint_extension: str = None,):
         """
-        Streams all records of a specific type from the ArchivesSpace instance,
-        assuming that a `/repositories/:repo_id/:plural_record_type` endpoint
+        Streams all records of a specific type from the ArchivesSpace 
+        instance, assuming that a 
+        `/repositories/:repo_id/:plural_record_type` endpoint
         exists, and supports the `all_ids=true` parameter.
 
-        `:plural_record_type:` The desired record type, formatted as it appears
-        in the documentation for the related API endpoint.
+        `:plural_record_type:` The desired record type, formatted as it
+        appears in the documentation for the related API endpoint.
 
         `:repository_uris:` Optional list of repository URIs, which limits the
         records that are downloaded. If omitted, records will be pulled from
         all repositories.
+
+        `:endpoint_extension:` Optional extension to put at the end of each
+        record URI. For example, specifying 'resources' and 
+        endpoint_extension='tree' supports the
+        '/repositories/:repo_id/resources/:id/tree' endpoint.
         """
 
         return (
             self._client.get(
-                '%s/%s/%d' %
-                (repo_uri, plural_record_type, rec_id)
+                '%s/%s/%d%s' %
+                (
+                    repo_uri, plural_record_type, rec_id,
+                    '' if endpoint_extension is None else
+                    '/%s' % endpoint_extension.strip('/'),
+                )
             ).json()
 
             for repo_uri in self._get_repo_uris(repository_uris)
@@ -89,9 +101,57 @@ class RecordStreams(object):
 
         )
 
-    def resources(self, repository_uris: list = None,):
+    def resources(self, repository_uris: list = None, 
+                  endpoint_extension: str = None,):
         """
         Streams all resources from the ArchivesSpace instance.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+
+        `:endpoint_extension:` Optional extension to put at the end of each
+        record URI, supporting endpoints such as
+        `/repositories/:repo_id/resources/:id/tree`
+        """
+
+        return self.repository_records(
+            plural_record_type='resources',
+            repository_uris=repository_uris,
+            endpoint_extension=endpoint_extension,
+        )
+
+    def resource_trees(self, repository_uris: list = None,):
+        """
+        Streams all resource trees from the ArchivesSpace instance.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+        """
+
+        return self.resources(
+            repository_uris=repository_uris,
+            endpoint_extension='tree',
+        )
+
+    def resource_ordered_records(self, repository_uris: list = None,):
+        """
+        Streams all resource ordered_records from the ArchivesSpace instance.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+        """
+
+        return self.resources(
+            repository_uris=repository_uris,
+            endpoint_extension='ordered_records',
+        )
+
+    def accessions(self, repository_uris: list = None,):
+        """
+        Streams all accession records from the ArchivesSpace instance.
 
         :repository_uris: Optional list of repository URIs, which limits the
         records that are downloaded. If omitted, records will be pulled from
@@ -99,7 +159,7 @@ class RecordStreams(object):
         """
 
         return self.repository_records(
-            plural_record_type='resources',
+            plural_record_type='accessions',
             repository_uris=repository_uris,
         )
 
@@ -155,3 +215,17 @@ class RecordStreams(object):
         Streams all software agents from the ArchivesSpace instance.
         """
         return self.agents('software')
+
+    def top_containers(self, repository_uris: list = None,):
+        """
+        Streams all top_container records from the ArchivesSpace instance.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+        """
+
+        return self.repository_records(
+            plural_record_type='top_containers',
+            repository_uris=repository_uris,
+        )

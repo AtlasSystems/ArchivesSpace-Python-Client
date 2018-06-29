@@ -19,7 +19,7 @@ class UserManagement(object):
         ArchivesSpace instance.
         """
         return [
-            _user for _user in
+            user for user in
             self._record_streams.users()
         ]
 
