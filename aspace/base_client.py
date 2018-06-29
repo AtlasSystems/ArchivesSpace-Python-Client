@@ -12,13 +12,33 @@ class BaseASpaceClient(requests.Session):
     methods that relate to 
     """
 
-    def __init__(self, api_host='http://localhost:8089',
-                 username='admin', password=''):
+    def __init__(self, api_host='http://localhost:8089', username='admin',
+                 password='', auto_auth=True):
+        """
+        Initializes a new ArchivesSpace client.
+
+        `:api_host:` Url used to connect to the API of the ArchivesSpace 
+        instance. Trailing slashes are not required.
+
+        `:username:` Username of an ASpace user account that has access
+        to the API.
+
+        `:password:` Password of the ASpace user account.
+
+        `:auto_auth:` Specifies whether the client automatically logs
+        sends an authentication request to ArchivesSpace on initialization.
+        This should be turned off in cases where the implementing program
+        needs to wait for the ArchivesSpace instance to spin up.
+        """
+        
         super().__init__()
         self.aspace_api_host = api_host
         self.aspace_username = username
         self.aspace_password = password
         self.headers['Accept'] = 'application/json'
+        
+        if auto_auth:
+            self.authenticate()
 
     def prepare_request(self, request: requests.Request):
         """
