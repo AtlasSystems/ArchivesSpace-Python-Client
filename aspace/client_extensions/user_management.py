@@ -30,23 +30,22 @@ class UserManagement(object):
         """
         return self._record_streams.users()
 
-    def change_all_passwords(self, new_password: str) -> list:
+    def change_all_passwords(self, new_password: str, include_admin=False) -> list:
         """
         Changes the passwords for all of the users in the ArchivesSpace 
-        instance:
-        
-        - incuding the admin user
-        - not including any other system users
+        instance, not including any of the system users. 
 
         Returns a list of all of the JSON responses.
+
+        `:new_password:` The new password to set for all users.
+        TODO: Make new_password support callable(user_record)
+
+        `:include_admin:` Determines whether the `admin` user should be
+        included in the global password reset.
         """
 
-        invalid = new_password is None
-        invalid = invalid or len(new_password) == 0
-        invalid = invalid or new_password.isspace()
-
-        if invalid:
-            raise ValueError('A new password must be specified.')
+        if new_password is None:
+            raise ValueError('new_password is required.')
 
         return [
             self._client.post(
@@ -57,5 +56,8 @@ class UserManagement(object):
             for user in self._record_streams.users()
 
             # Don't update any system users, unless they are 'admin'
-            if (user.get('is_admin') or not user.get('is_system_user'))
+            if (
+                (user.get('is_admin') and include_admin)
+                or not user.get('is_system_user')
+            )
         ]

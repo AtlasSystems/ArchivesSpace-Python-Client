@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='aspace-client',
-    version='0.3.1',
+    version='0.3.2',
     description='Provides methods and classes that can be used when interacting with the ArchivesSpace API.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -17,15 +17,17 @@ setup(
     author='Austin T Schaffer',
     author_email='schaffer.austin.t@gmail.com',
     classifiers=[
-        #   3 - Alpha
+        'Development Status :: 3 - Alpha',
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
+
         'Intended Audience :: Developers',
-        'Intended Audience :: Librarians',
-        'Intended Audience :: Archivists',
+        'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -42,6 +44,7 @@ setup(
     project_urls={
         'Bug Reports': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/issues',
         'Feature Requests': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/issues',
-        'Source': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client'
+        'Source': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client',
+        
     },
 )
