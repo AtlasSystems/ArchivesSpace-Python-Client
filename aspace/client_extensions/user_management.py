@@ -30,9 +30,10 @@ class UserManagement(object):
         """
         return self._record_streams.users()
 
-    def change_all_passwords(self, new_password: str, include_admin=False) -> list:
+    def change_all_passwords(self, new_password: str, 
+                             include_admin=False) -> list:
         """
-        Changes the passwords for all of the users in the ArchivesSpace 
+        Changes the passwords for all of the users in the ArchivesSpace
         instance, not including any of the system users. 
 
         Returns a list of all of the JSON responses.
