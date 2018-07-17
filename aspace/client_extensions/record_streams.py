@@ -1,6 +1,6 @@
 import re
 
-from aspace.base_client import BaseASpaceClient
+from aspace import base_client
 
 
 class RecordStreams(object):
@@ -9,7 +9,7 @@ class RecordStreams(object):
     of ArchivesSpace of a particular record type.
     """
 
-    def __init__(self, client: BaseASpaceClient):
+    def __init__(self, client: base_client.BaseASpaceClient):
         self._client = client
 
     def repositories(self):

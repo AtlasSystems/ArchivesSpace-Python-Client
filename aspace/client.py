@@ -2,11 +2,12 @@ r"""
 Contains the ASpaceClient class.
 """
 
-import aspace.base_client
-import aspace.client_extensions as client_extensions
+from aspace import base_client
+
+from aspace import client_extensions
 
 
-class ASpaceClient(aspace.base_client.BaseASpaceClient):
+class ASpaceClient(base_client.BaseASpaceClient):
     """
     Wraps the Session class from the requests package. Extends the 
     functionality of the BaseASpaceClient, by including instances

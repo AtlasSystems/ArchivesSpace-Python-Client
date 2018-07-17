@@ -1,8 +1,7 @@
 from typing import Union
 
-from aspace.base_client import BaseASpaceClient
-
-from aspace.client_extensions.record_streams import RecordStreams
+from aspace import base_client
+from aspace.client_extensions import record_streams
 
 
 class UserManagement(object):
@@ -11,9 +10,9 @@ class UserManagement(object):
     using different components of the ArchivesSpace API.
     """
 
-    def __init__(self, client: BaseASpaceClient):
+    def __init__(self, client: base_client.BaseASpaceClient):
         self._client = client
-        self._record_streams = RecordStreams(client)
+        self._record_streams = record_streams.RecordStreams(client)
 
     def all_user_records(self) -> list:
         """
