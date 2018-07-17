@@ -34,7 +34,7 @@ class UserManagement(object):
                              include_admin=False) -> list:
         """
         Changes the passwords for all of the users in the ArchivesSpace
-        instance, not including any of the system users. 
+        instance, not including any of the system users.
 
         Returns a list of all of the JSON responses.
 
@@ -56,7 +56,8 @@ class UserManagement(object):
 
             for user in self._record_streams.users()
 
-            # Don't update any system users, unless they are 'admin'
+            # Don't update any system users, unless they are 'admin' and the
+            # params indicate that the admin should be included.
             if (
                 (user.get('is_admin') and include_admin)
                 or not user.get('is_system_user')

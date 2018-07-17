@@ -216,6 +216,24 @@ class RecordStreams(object):
         """
         return self.agents('software')
 
+    def all_agents(self):
+        """
+        Streams all agent records from the ArchivesSpace instance.
+        """
+
+        return (
+            record
+
+            for stream in [
+                self.people,
+                self.corporate_entities,
+                self.families,
+                self.software,
+            ]
+
+            for record in stream()
+        )
+
     def top_containers(self, repository_uris: list = None,):
         """
         Streams all top_container records from the ArchivesSpace instance.
