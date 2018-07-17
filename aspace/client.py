@@ -2,11 +2,11 @@ r"""
 Contains the ASpaceClient class.
 """
 
-from . import BaseASpaceClient
-import aspace.client_extensions as extensions
+import aspace.base_client
+import aspace.client_extensions as client_extensions
 
 
-class ASpaceClient(BaseASpaceClient):
+class ASpaceClient(aspace.base_client.BaseASpaceClient):
     """
     Wraps the Session class from the requests package. Extends the 
     functionality of the BaseASpaceClient, by including instances
@@ -20,7 +20,7 @@ class ASpaceClient(BaseASpaceClient):
         methods that allow records to be paged from ArchivesSpace.
         """
 
-        return extensions.RecordPages(self)
+        return client_extensions.record_pages.RecordPages(self)
 
     def stream_records(self):
         """
@@ -28,7 +28,7 @@ class ASpaceClient(BaseASpaceClient):
         methods that allow records to be streamed from ArchivesSpace.
         """
 
-        return extensions.RecordStreams(self)
+        return client_extensions.record_streams.RecordStreams(self)
 
     def manage_users(self):
         """
@@ -36,4 +36,4 @@ class ASpaceClient(BaseASpaceClient):
         providing methods that allow batch updates for user records.
         """
 
-        return extensions.UserManagement(self)
+        return client_extensions.user_management.UserManagement(self)

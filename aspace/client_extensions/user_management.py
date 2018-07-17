@@ -1,6 +1,6 @@
-from . import RecordStreams
+from aspace.base_client import BaseASpaceClient
 
-from aspace import BaseASpaceClient
+from aspace.client_extensions.record_streams import RecordStreams
 
 
 class UserManagement(object):

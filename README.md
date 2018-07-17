@@ -22,7 +22,7 @@ ArchivesSpace migrations.
 ## Usage
 
 ```python
-from aspace import ASpaceClient
+from aspace.client import ASpaceClient
 
 client = ASpaceClient('http://localhost:8089', 'admin', 'admin')
 ```
