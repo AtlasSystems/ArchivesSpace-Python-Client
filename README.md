@@ -44,61 +44,100 @@ client = ASpaceClient(
 ```
 
 Failed authentications raise an error, so if the script is still running,
-you're ready to query the API! These operations use both
+you're ready to query the API! This package interacts with the ArchivesSpace 
+API using the following considerations.
 
 1. the syntax layed out by the `requests` Python library that we all love and
 2. the endpoint structure layed out by the ArchivesSpace API docs
 
+The typical syntax of the `requests` Python library is perserved, so all HTTP 
+methods (POST, GET, DELETE, etc.) typically start with a URI or an endpoint,
+relative to the base URL of the API. The URI is never assumed, so that all of
+the functionality of the API can be utilized whenever you need it.
+
+### Get the System Info
+
 ```python
 # Get the system info
-client.get('/').json()
+print(client.get('/').json())
 ```
 
+### Manage Repositories
+
 ```python
-# Manage your repositories
+
+# Get a listing of all repositories
 repositories = client.get('/repositories').json()
+for repository in repositories:
+    print(repository)
 
-for repo in repositories:
-    print(repo)
+# Create a new repository
+new_repo = {}
+new_repo['repo_code'] = 'test_repo'
+new_repo['name'] = 'Test Repository'
+response = client.post('/repositories', new_repo).json()
 
-new_repo_response = client.post(
-    '/repositories',
-    {
-        'repo_code': 'test_repo', 
-        'name': 'Test Repository'
-    }).json()
+# Update the name of that repository
+repo = client.get(response['uri']).json()
+repo['name'] = 'Andy Samberg University Archives - Test Repository'
+client.post(repo['uri'], repo)
 
-new_repo = client.get(new_repo_response['uri']).json()
-new_repo['name'] += '!!!'
-
-update_repo_response = client.post(
-    new_repo['uri'], new_repo).json()
+# Delete the repository
+client.delete(new_repo['uri'])
 ```
 
 This syntax can be used to interact with all of ArchivesSpace's endpoints, as
 long as the response comes back as JSON. Most do. There are also some
 extensions to ArchivesSpace's API functionality that are currently provided.
 
+### Streaming Records
+
 ```python
+        # Manage your resource records one at a time, no matter how many you have
 for resource in client.stream_records().resources():
-    # Print the URI for every resource
-    print(resource['uri'])
+    if resource['title'].endswith('!'):
+        # Remove trailing spaces and 
+        print('Cleaning Resource:', resource['uri'], resource['title'])
+        resource['title'] = resource['title'].rstrip('!')
+        update_result = client.post(resource['uri'], resource).json()
+        print(update_result)
 
-    # Make all of your resources really excited
-    resource['title'] += '!!!'
-    update_result = client.post(resource['uri'], resource)
-    print(update_result)
+# Works for accessions and agents
+client.stream_records().accessions()
+client.stream_records().people()
+client.stream_records().corporate_entities()
+client.stream_records().families()
+client.stream_records().software()
+client.stream_records().all_agents()
 
-# Clean up your excitement from earlier
-for resource in client.stream_records().resources():
-    # Manage your resource records one at a time, no matter how many there are
+
+# Works for endpoints that do not have an explicitly defined stream method
+client.stream_records().records('container_profiles'):
+    pass
+
+# Works for endpoints that do not have an explicitly defined stream method
+# and require a repository reference in the URI.
+for assessment in client.stream_records().repository_records('assessments'):
+    pass
+
+# Optional limits can be placed on record streams, so that only 1 repository
+# is considered, as opposed to streaming all records from all repositories,
+# which is default.
+assessments_stream = client.stream_records().repository_records(
+    'assessments',
+    repository_uris=['/repositories/2']
+)
+
+for assessment in assessments_stream:
     pass
 ```
+
+### User Management
 
 ```python
 # Change all of your user's passwords to "something really complicated"
 client.manage_users().change_all_passwords(
-    'pa$$w0rd', 
+    'pa$$w0rd',
     include_admin=True
 )
 
@@ -106,12 +145,23 @@ client.manage_users().change_all_passwords(
 import string
 import random
 
-client.manage_users().change_all_passwords(
-    include_admin=False,
-    new_password=''.join(
+def random_password():
+    return ''.join(
         random.choice(string.ascii_uppercase + string.digits)
         for _ in range(25)
     ),
+
+# The same password for every user
+client.manage_users().change_all_passwords(
+    new_password=random_password()
+    include_admin=False,
+)
+
+# Different password for every user
+client.manage_users().change_all_passwords(
+    new_password=lambda user: random_password()
+    include_admin=False,
+)
 ```
 
 ## Installation
