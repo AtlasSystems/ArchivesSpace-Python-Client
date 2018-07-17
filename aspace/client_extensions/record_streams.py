@@ -238,3 +238,8 @@ class RecordStreams(object):
             plural_record_type='top_containers',
             repository_uris=repository_uris,
         )
+
+    def subjects(self):
+        return self.records(
+            plural_record_type='subjects'
+        )
