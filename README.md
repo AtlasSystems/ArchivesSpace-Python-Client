@@ -149,17 +149,17 @@ def random_password():
     return ''.join(
         random.choice(string.ascii_uppercase + string.digits)
         for _ in range(25)
-    ),
+    )
 
 # The same password for every user
 client.manage_users().change_all_passwords(
-    new_password=random_password()
+    new_password=random_password(),
     include_admin=False,
 )
 
 # Different password for every user
 client.manage_users().change_all_passwords(
-    new_password=lambda user: random_password()
+    new_password=lambda user: random_password(),
     include_admin=False,
 )
 ```
@@ -189,6 +189,8 @@ pip install -e "$AS_CLIENT_DIR"
 If you have any suggestions or bug reports please feel free to report them in
 [the issues tab](https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/issues) 
 or email me at [schaffer.austin.t@gmail.com](mailto:schaffer.austin.t@gmail.com).
+Feel free to email me if you are new to Git, but would still like to 
+contribute.
 
 Pull requests are welcome, but they will subject to a review process.
 Consistent code style is a goal for this project, as it currently 
