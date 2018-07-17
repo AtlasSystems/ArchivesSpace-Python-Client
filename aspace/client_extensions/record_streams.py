@@ -183,38 +183,29 @@ class RecordStreams(object):
         """
         return self.records('users')
 
-    def agents(self, plural_agent_type: str):
-        """
-        Streams all agent records from the ArchivesSpace instance, of the
-        specified agent type.
-
-        `:plural_agent_type:` The desired type of agent
-        """
-        return self.records('agents/%s' % plural_agent_type)
-
     def people(self):
         """
         Streams all person agents from the ArchivesSpace instance.
         """
-        return self.agents('people')
+        return self.records('agents/people')
 
     def corporate_entities(self):
         """
         Streams all corporate entity agents from the ArchivesSpace instance.
         """
-        return self.agents('corporate_entities')
+        return self.records('agents/corporate_entities')
 
     def families(self):
         """
         Streams all family agents from the ArchivesSpace instance.
         """
-        return self.agents('families')
+        return self.records('agents/families')
 
     def software(self):
         """
         Streams all software agents from the ArchivesSpace instance.
         """
-        return self.agents('software')
+        return self.records('agents/software')
 
     def all_agents(self):
         """
