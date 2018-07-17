@@ -93,7 +93,7 @@ extensions to ArchivesSpace's API functionality that are currently provided.
 ### Streaming Records
 
 ```python
-        # Manage your resource records one at a time, no matter how many you have
+# Manage your resource records one at a time, no matter how many you have
 for resource in client.stream_records().resources():
     if resource['title'].endswith('!'):
         # Remove trailing spaces and 
