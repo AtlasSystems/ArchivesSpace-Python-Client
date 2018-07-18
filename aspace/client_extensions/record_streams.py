@@ -32,15 +32,16 @@ class RecordStreams(object):
             [repo['uri'] for repo in self.repositories()]
         )
 
+        assert not any(filter(lambda uri: type(uri) is not str, repo_uris)), (
+            'All repository uris must be strings'
+        )
+
         def invalid_repo_uri(repo_uri):
             return not re.match(r'/repositories/\d+', repo_uri)
 
-        if any(filter(lambda uri: type(uri) is not str, repo_uris)):
-            raise TypeError('All repository uris must be strings')
-
-        if any(filter(invalid_repo_uri, repo_uris)):
-            raise ValueError(r'All Repository URIs must be of the form \
-            "/repositories/\d+"')
+        assert not any(filter(invalid_repo_uri, repo_uris)), (
+            r'All Repository URIs must be of the form /repositories/\d+"'
+        )
 
         return repo_uris
 
