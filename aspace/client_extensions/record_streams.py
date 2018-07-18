@@ -69,14 +69,14 @@ class RecordStreams(object):
         `/repositories/:repo_id/:plural_record_type` endpoint
         exists, and supports the `all_ids=true` parameter.
 
-        `:plural_record_type:` The desired record type, formatted as it
+        :plural_record_type: The desired record type, formatted as it
         appears in the documentation for the related API endpoint.
 
-        `:repository_uris:` Optional list of repository URIs, which limits the
+        :repository_uris: Optional list of repository URIs, which limits the
         records that are downloaded. If omitted, records will be pulled from
         all repositories.
 
-        `:endpoint_extension:` Optional extension to put at the end of each
+        :endpoint_extension: Optional extension to put at the end of each
         record URI. For example, specifying 'resources' and 
         endpoint_extension='tree' supports the
         '/repositories/:repo_id/resources/:id/tree' endpoint.
@@ -110,7 +110,7 @@ class RecordStreams(object):
         records that are downloaded. If omitted, records will be pulled from
         all repositories.
 
-        `:endpoint_extension:` Optional extension to put at the end of each
+        :endpoint_extension: Optional extension to put at the end of each
         record URI, supporting endpoints such as
         `/repositories/:repo_id/resources/:id/tree`
         """

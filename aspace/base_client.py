@@ -17,15 +17,15 @@ class BaseASpaceClient(requests.Session):
         """
         Initializes a new ArchivesSpace client.
 
-        `:api_host:` Url used to connect to the API of the ArchivesSpace 
+        :api_host: Url used to connect to the API of the ArchivesSpace 
         instance. Trailing slashes are not required.
 
-        `:username:` Username of an ASpace user account that has access
+        :username: Username of an ASpace user account that has access
         to the API.
 
-        `:password:` Password of the ASpace user account.
+        :password: Password of the ASpace user account.
 
-        `:auto_auth:` Specifies whether the client automatically logs
+        :auto_auth: Specifies whether the client automatically logs
         sends an authentication request to ArchivesSpace on initialization.
         This should be turned off in cases where the implementing program
         needs to wait for the ArchivesSpace instance to spin up.

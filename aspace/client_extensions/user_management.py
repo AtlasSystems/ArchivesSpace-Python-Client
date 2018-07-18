@@ -39,13 +39,13 @@ class UserManagement(object):
 
         Returns a list of all of the responses from the ArchivesSpace server.
 
-        `:new_password:` The new password to set for all users. If a string is
+        :new_password: The new password to set for all users. If a string is
         passed, that string will be used to set the password for all users. If
         new_password is callable, new_password should accept a user record 
         dict and should return a string, which can be used to set a unique 
         password for each user.
 
-        `:include_admin:` Determines whether the `admin` user should be
+        :include_admin: Determines whether the `admin` user should be
         included in the global password reset.
         """
 
@@ -65,11 +65,11 @@ class UserManagement(object):
 
         Returns the response from the server.
 
-        `:user_uri:` The uri for the user record that will receive the new 
+        :user_uri: The uri for the user record that will receive the new 
         password. NOTE: The user record will be downloaded and reuploaded, 
         which will increment the user's `lock_version`.
 
-        `:new_password:` The new password to set for all users. If a string is
+        :new_password: The new password to set for all users. If a string is
         passed, that string will be used to set the password for all users. If
         new_password is callable, new_password should accept a user record 
         dict and should return a string, which can be used to set a unique 
