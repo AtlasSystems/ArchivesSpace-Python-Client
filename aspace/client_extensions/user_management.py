@@ -31,6 +31,25 @@ class UserManagement(object):
         """
         return self._record_streams.users()
 
+    def _change_password(self, user_record: dict,
+                         new_password: Union[str, callable],):
+        """
+        Changes the password for the user record. Returns the response from
+        the ArchivesSpace server. Only to be used internally.
+        """
+        password = (
+            new_password(user_record) if callable(new_password) else
+            new_password
+        )
+
+        assert password is not None
+
+        return self._client.post(
+            user_record['uri'],
+            json=user_record,
+            params={'password': password}
+        )
+
     def change_all_passwords(self, new_password: Union[str, callable],
                              include_admin=False) -> list:
         """
@@ -48,44 +67,47 @@ class UserManagement(object):
         :include_admin: Determines whether the `admin` user should be
         included in the global password reset.
         """
-
         return [
-            self.change_password(user['uri'], new_password)
+            self._change_password(user, new_password)
 
             for user in self._record_streams.users()
 
-            if (not user.get('is_admin')) or include_admin
+            if (not user['is_admin']) or include_admin
         ]
 
     def change_password(self, user_uri: str,
                         new_password: Union[str, callable],):
         """
-        Changes the passwords for all of the users in the ArchivesSpace
-        instance, not including any of the system users.
-
-        Returns the response from the server.
+        Changes the password for the user specified by the URI. Returns the
+        response from the ArchivesSpace server.
 
         :user_uri: The uri for the user record that will receive the new 
         password. NOTE: The user record will be downloaded and reuploaded, 
-        which will increment the user's `lock_version`.
+        which will increment the user's lock_version.
 
         :new_password: The new password to set for all users. If a string is
         passed, that string will be used to set the password for all users. If
-        new_password is callable, new_password should accept a user record 
-        dict and should return a string, which can be used to set a unique 
-        password for each user.
+        new_password is callable, new_password should accept the user record
+        dict and should return a string.
         """
-        user = self._client.get(user_uri).json()
-
-        password = (
-            new_password(user) if callable(new_password) else
-            new_password
+        return self._change_password(
+            self._client.get(user_uri).json(),
+            new_password,
         )
 
+    def new_user(self, user: dict, password: str):
+        """
+        Creates a new user and returns he response from the server.
+
+        :user: A dict representation of a user record. Requires
+        ['username'] and ['name'] at a minimum.
+
+        :password: The password for the new user.
+        """
         assert password is not None
 
         return self._client.post(
-            user['uri'],
+            '/users',
             json=user,
-            params={'password': password}
+            params={'password': password},
         )
