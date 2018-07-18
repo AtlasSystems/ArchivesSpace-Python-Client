@@ -45,20 +45,74 @@ class RecordStreams(object):
 
         return repo_uris
 
+    def uris(self, plural_record_type: str,) -> iter:
+        """
+        Streams all URIs of a specific type from the ArchivesSpace instance,
+        assuming that a `/:plural_record_type` endpoint exists, and supports
+        the `all_ids=true` parameter.
+
+        :plural_record_type: The desired record type, formatted as it
+        appears in the documentation for the related API endpoint.
+        """
+        return (
+            '/%s/%d' % (plural_record_type, rec_id)
+
+            for rec_id in self._client.get(
+                '/%s?all_ids=true' % plural_record_type
+            ).json()
+        )
+
+    def repository_relative_uris(self, plural_record_type: str,
+                                 repository_uris: list = None,
+                                 endpoint_extension: str = None,):
+        """
+        Streams all URIs of a specific type from the ArchivesSpace
+        instance, assuming that a
+        `/repositories/:repo_id/:plural_record_type` endpoint
+        exists, and supports the `all_ids=true` parameter.
+
+        :plural_record_type: The desired record type, formatted as it
+        appears in the documentation for the related API endpoint.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+
+        :endpoint_extension: Optional extension to put at the end of each
+        record URI. For example, specifying 'resources' and 
+        endpoint_extension='tree' supports the
+        '/repositories/:repo_id/resources/:id/tree' endpoint.
+        """
+        return (
+            '%s/%s/%d%s' %
+            (
+                repo_uri, 
+                plural_record_type, 
+                rec_id,
+                '' if endpoint_extension is None else
+                '/%s' % endpoint_extension.strip('/'),
+            )
+
+            for repo_uri in self._get_repo_uris(repository_uris)
+
+            for rec_id in self._client.get(
+                '%s/%s?all_ids=true' %
+                (repo_uri, plural_record_type)
+            ).json()
+        )
+
     def records(self, plural_record_type: str,):
         """
         Streams all records of a specific type from the ArchivesSpace instance,
         assuming that a `/:plural_record_type` endpoint exists, and supports
         the `all_ids=true` parameter.
+
+        :plural_record_type: The desired record type, formatted as it
+        appears in the documentation for the related API endpoint.
         """
         return (
-            self._client.get(
-                '/%s/%d' % (plural_record_type, rec_id)
-            ).json()
-
-            for rec_id in self._client.get(
-                '/%s?all_ids=true' % plural_record_type
-            ).json()
+            self._client.get(uri).json()
+            for uri in self.uris(plural_record_type)
         )
 
     def repository_records(self, plural_record_type: str,
@@ -84,22 +138,13 @@ class RecordStreams(object):
         """
 
         return (
-            self._client.get(
-                '%s/%s/%d%s' %
-                (
-                    repo_uri, plural_record_type, rec_id,
-                    '' if endpoint_extension is None else
-                    '/%s' % endpoint_extension.strip('/'),
-                )
-            ).json()
+            self._client.get(uri).json()
 
-            for repo_uri in self._get_repo_uris(repository_uris)
-
-            for rec_id in self._client.get(
-                '%s/%s?all_ids=true' %
-                (repo_uri, plural_record_type)
-            ).json()
-
+            for uri in self.repository_relative_uris(
+                plural_record_type,
+                repository_uris=repository_uris,
+                endpoint_extension=endpoint_extension,
+            )
         )
 
     def resources(self, repository_uris: list = None, 
