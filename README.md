@@ -174,6 +174,7 @@ client.manage_users().change_all_passwords(
 )
 ```
 
+
 ## Installation
 
 This project has a listing on PyPI and can be installed using pip.
@@ -183,7 +184,7 @@ pip install aspace-client
 ```
 
 Below are instructions for installing this package in "editable" mode. This
-will allow you to make changes to the package in real time.
+will allow you to make changes to the package and test them in real time.
 
 ```bash
 AS_CLIENT_DIR="/path/to/aspace-client"
@@ -210,5 +211,5 @@ Please keep this in mind when submitting or requesting contributions,
 but also keep in mind that PEP is a flexible standard and that I'm 
 willing to make exceptions.
 
-Also, please feel free to call me out on anything currently in this 
-package that is poorly styled or just generally bad code.
+Also, please feel free to call me out on anything currently in this package
+that is poorly styled or just generally bad code. 
