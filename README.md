@@ -35,27 +35,37 @@ component, and you're in an environment where it is not 100% certain that
 ArchivesSpace is running and accessible. For that operation:
 
 ```python
+from time import sleep
+from aspace.client import ASpaceClient
+
 client = ASpaceClient(
     base_url='http://localhost:8089', # Base url for connecting to your ASpace's API.
     username='admin',
     password='admin',
     auto_authenticate=False,
 )
+
+while client.get('/version').status_code != 200:
+    print('ArchivesSpace API is not up')
+    sleep(2)
+
+client.authenticate()
 ```
 
-Failed authentications raise an error, so if the script is still running,
-you're ready to query the API! This package interacts with the ArchivesSpace 
-API using the following considerations.
+In both cases, failed authentications raise an error, so if the script is
+still running, you're ready to query the API! This package interacts with
+the ArchivesSpace API using the following considerations.
 
-1. the syntax layed out by the `requests` Python library that we all love and
-2. the endpoint structure layed out by the ArchivesSpace API docs
+1. the syntax described by the `requests` Python library that we all love and
+2. the API endpoint structure described by the docs for the ArchivesSpace API
 
-The typical syntax of the `requests` Python library is perserved, so all HTTP 
+The typical syntax of the `requests` Python library is preserved, so all HTTP
 methods (POST, GET, DELETE, etc.) typically start with a URI or an endpoint,
-relative to the base URL of the API. The URI is never assumed, so that all of
-the functionality of the API can be utilized whenever you need it.
+relative to the base URL of the API. The URI is never assumed to make sure 
+that all operations are predictable, and that all of the functionality of the
+API is utilized correctly.
 
-### Get the System Info
+### Get ArchivesSpace System Info
 
 ```python
 # Get the system info
@@ -75,12 +85,12 @@ for repository in repositories:
 new_repo = {}
 new_repo['repo_code'] = 'test_repo'
 new_repo['name'] = 'Test Repository'
-response = client.post('/repositories', new_repo).json()
+response = client.post('/repositories', json=new_repo).json()
 
 # Update the name of that repository
 repo = client.get(response['uri']).json()
 repo['name'] = 'Andy Samberg University Archives - Test Repository'
-client.post(repo['uri'], repo)
+client.post(repo['uri'], json=repo)
 
 # Delete the repository
 client.delete(new_repo['uri'])
@@ -99,7 +109,7 @@ for resource in client.stream_records().resources():
         # Remove trailing spaces and 
         print('Cleaning Resource:', resource['uri'], resource['title'])
         resource['title'] = resource['title'].rstrip('!')
-        update_result = client.post(resource['uri'], resource).json()
+        update_result = client.post(resource['uri'], json=resource).json()
         print(update_result)
 
 # Works for accessions and agents
