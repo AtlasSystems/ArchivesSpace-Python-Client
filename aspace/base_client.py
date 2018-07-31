@@ -7,7 +7,7 @@ import requests
 import time
 import urllib
 
-import aspace
+from aspace import constants
 
 
 class BaseASpaceClient(requests.Session):
@@ -16,9 +16,9 @@ class BaseASpaceClient(requests.Session):
     methods that relate to 
     """
 
-    def __init__(self, api_host: str = aspace.constants.DEFAULT_API_HOST,
-                 username: str = aspace.constants.DEFAULT_USERNAME,
-                 password: str = aspace.constants.DEFAULT_PASSWORD,
+    def __init__(self, api_host: str = constants.DEFAULT_API_HOST,
+                 username: str = constants.DEFAULT_USERNAME,
+                 password: str = constants.DEFAULT_PASSWORD,
                  auto_auth=True):
         """
         Initializes a new ArchivesSpace client.
@@ -54,7 +54,7 @@ class BaseASpaceClient(requests.Session):
         instance of the `configparser.ConfigParser` builtin Python config
         parser. The following keys must be set under the specified `section`
         of the specified `config`. If any are not set, the initializer will
-        use defaults from the `aspace.constants` module.
+        use defaults from the `constants` module.
 
         `"api_host"`: Url used to connect to the API of the ArchivesSpace 
         instance. Trailing slashes are not required.
@@ -70,13 +70,13 @@ class BaseASpaceClient(requests.Session):
 
         _self = cls(
             api_host=aspace_credential(
-                'api_host', aspace.constants.DEFAULT_API_HOST),
+                'api_host', constants.DEFAULT_API_HOST),
             
             username=aspace_credential(
-                'username', aspace.constants.DEFAULT_USERNAME),
+                'username', constants.DEFAULT_USERNAME),
             
             password=aspace_credential(
-                'password', aspace.constants.DEFAULT_PASSWORD),
+                'password', constants.DEFAULT_PASSWORD),
 
             auto_auth=auto_auth,
         )
@@ -97,6 +97,8 @@ class BaseASpaceClient(requests.Session):
         """
         Periodically checks the `/` endpoint of the base api host until the
         API becomes ready, or until the max_wait_time is reached.
+
+        Returns a reference to self once finished.
 
         :check_interval: Specifies the number of seconds in between each 
         check. Can be a non-integer interval of seconds. Defaults to 5.
@@ -131,6 +133,7 @@ class BaseASpaceClient(requests.Session):
 
         if authenticate_on_success:
             self.authenticate()
+        return self
 
     def authenticate(self):
         """
@@ -145,7 +148,7 @@ class BaseASpaceClient(requests.Session):
             {'password': self.aspace_password}
         )
 
-        if resp.status_code != 200:
+        if not resp.ok:
             raise ValueError(
                 'Received %d while attempting to authenticate: %s' %
                 (resp.status_code, resp.text)
