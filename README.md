@@ -52,9 +52,42 @@ while client.get('/version').status_code != 200:
 client.authenticate()
 ```
 
-In both cases, failed authentications raise an error, so if the script is
-still running, you're ready to query the API! This package interacts with
-the ArchivesSpace API using the following considerations.
+There is also built-in support for the operation above, as well as built-in
+functionality for pulling settings from an instance of ConfigParser.
+
+In settings.ini:
+
+```ini
+[aspace_credentials]
+api_host = 'http://aspace.cloudapp.eastus.azure.com'
+username = 'automation-user'
+password = 'automation-user-password'
+```
+
+In app.py:
+
+```python
+import configparser
+
+import aspace
+
+config = configparser.ConfigParser()
+config.load('settings.ini')
+
+client = (
+    aspace.client.ASpaceClient
+    .init_from_config(config)
+    .wait_until_ready(
+        check_interval=2.0,
+        max_wait_time=200.0,
+        authenticate_on_success=True,
+    )
+)
+```
+
+Failed authentications raise an error, so if any of these scripts are still
+running, you're ready to query the API! This package interacts with the
+ArchivesSpace API using the following considerations.
 
 1. the syntax described by the `requests` Python library that we all love and
 2. the API endpoint structure described by the docs for the ArchivesSpace API
