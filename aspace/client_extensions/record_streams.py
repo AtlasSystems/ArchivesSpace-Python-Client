@@ -1,6 +1,9 @@
 import re
 
-from aspace import base_client
+from aspace import constants, base_client
+
+
+VALID_REPO_URI_RE = re.compile(constants.VALID_REPO_URI_REGEX)
 
 
 class RecordStreams(object):
@@ -29,21 +32,24 @@ class RecordStreams(object):
         repo_uris = (
             repository_uris
             if repository_uris is not None else
-            [repo['uri'] for repo in self.repositories()]
+            [
+                repo['uri']
+                for repo in
+                self.repositories()
+            ]
+        )
+        
+        def valid_repo_uri(repo_uri):
+            return (
+                (type(repo_uri) is str) and VALID_REPO_URI_RE.match(repo_uri)
+            )
+
+        assert all(map(valid_repo_uri, repo_uris)), (
+            'All repository URIs must be strings and must be of the form: %s' %
+            constants.VALID_REPO_URI_REGEX
         )
 
-        assert not any(filter(lambda uri: type(uri) is not str, repo_uris)), (
-            'All repository uris must be strings'
-        )
-
-        def invalid_repo_uri(repo_uri):
-            return not re.match(r'/repositories/\d+', repo_uri)
-
-        assert not any(filter(invalid_repo_uri, repo_uris)), (
-            r'All Repository URIs must be of the form /repositories/\d+"'
-        )
-
-        return repo_uris
+        return [uri.strip('/') for uri in repo_uris]
 
     def uris(self, plural_record_type: str,) -> iter:
         """
@@ -54,6 +60,8 @@ class RecordStreams(object):
         :plural_record_type: The desired record type, formatted as it
         appears in the documentation for the related API endpoint.
         """
+        plural_record_type = plural_record_type.strip('/')
+
         return (
             '/%s/%d' % (plural_record_type, rec_id)
 
@@ -83,11 +91,13 @@ class RecordStreams(object):
         endpoint_extension='tree' supports the
         '/repositories/:repo_id/resources/:id/tree' endpoint.
         """
+        plural_record_type = plural_record_type.strip('/')
+
         return (
             '%s/%s/%d%s' %
             (
-                repo_uri, 
-                plural_record_type, 
+                repo_uri,
+                plural_record_type,
                 rec_id,
                 '' if endpoint_extension is None else
                 '/%s' % endpoint_extension.strip('/'),
