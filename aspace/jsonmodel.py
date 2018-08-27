@@ -208,11 +208,8 @@ def subnote_text(content: str, publish=True):
 # endregion
 
 
-def subject_term(
-        term: str,
-        term_type: enums.SubjectTermType,
-        vocabulary_uri: str = '/vocabularies/1',
-        ):
+def subject_term(term: str, term_type: enums.SubjectTermType,
+                 vocabulary_uri: str = '/vocabularies/1') -> dict:
     """
     ```
     {
