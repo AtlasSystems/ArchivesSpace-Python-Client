@@ -3,6 +3,11 @@ Contains functions and classes that can be used when construction common
 components of ArchivesSpace's JsonModel objects.
 """
 
+from aspace import enums
+
+
+# region References
+
 
 def _ref(ref: str):
     """
@@ -13,7 +18,13 @@ def _ref(ref: str):
     return {'ref': ref}
 
 
-ref = _ref
+def ref(ref: str):
+    """
+    ```
+    {'ref': ref}
+    ```
+    """
+    return _ref(ref)
 
 
 def instance_sub_container(instance_type: str, ref: str,
@@ -56,7 +67,180 @@ def instance_digital_object(ref: str) -> dict:
     }
     ```
     """
+
     return {
         'instance_type': 'digital_object',
         'digital_object': _ref(ref)
+    }
+
+
+def linked_agent(ref: str, role: enums.LinkedAgentRole, relator: str = None,
+                 terms: list = None, title: str = None) -> dict:
+    """
+    ```
+    {
+        'ref': ref,
+        'role': role.value or role,
+        'relator': relator,
+        'terms': terms,
+        'title': title,        
+    }
+    ```
+    """
+
+    ref = _ref(ref)
+    
+    ref.update({
+        'role': (
+            role.value
+            if isinstance(role, enums.LinkedAgentRole) else
+            role
+        ),
+        'relator': relator,
+        'terms': terms,
+        'title': title,
+    })
+
+    return ref
+
+
+# endregion
+# region Notes
+
+
+def abstract_note(persistent_id: str = None, label: str = None, publish=True):
+    """
+    ```
+    {
+        'persistent_id': persistent_id,
+        'label': label,
+        'publish': publish,
+    }
+    ```
+    """
+    return {
+        'persistent_id': persistent_id,
+        'label': label,
+        'publish': publish,
+    }
+
+
+def note_singlepart(note_type: str, content: list, persistent_id: str = None,
+                    label: str = None, publish=True):
+    """
+    ```
+    {
+        # ...
+        'jsonmodel_type': 'note_singlepart',
+        'type': note_type,
+        'content': content.copy(),
+    }
+    ```
+    """
+
+    note = abstract_note(
+        persistent_id=persistent_id,
+        label=label,
+        publish=publish,
+    )
+    
+    note.update({
+        'type': note_type,
+        'jsonmodel_type': 'note_singlepart',
+        'content': content.copy(),
+    })
+
+    return note
+
+
+def note_multipart(note_type: str, subnotes: list, persistent_id: str = None,
+                   label: str = None, publish=True):
+    """
+    ```
+    {
+        'jsonmodel_type': 'note_multipart',
+        'type': note_type,
+        'subnotes': [note for note in subnotes],
+        # ...
+    }
+    ```
+
+    Note: If the contents of subnotes are not dicts, then each will be mapped
+    using the `subnote_text` jsonmodel template.
+    """
+    
+    note = abstract_note(
+        persistent_id=persistent_id,
+        label=label,
+        publish=publish,
+    )
+    
+    note.update({
+        'type': note_type,
+        'jsonmodel_type': 'note_multipart',
+        'subnotes': list(map(
+            lambda note: 
+                note if isinstance(note, dict) else 
+                subnote_text(note),
+            subnotes,
+        ))
+    })
+    
+    return note
+
+
+def subnote_text(content: str, publish=True):
+    """
+    ```
+    {
+        'jsonmodel_type': 'note_text',
+        'content': content,
+        'publish': publish
+    }
+    ```
+    """
+    return {
+        'jsonmodel_type': 'note_text',
+        'content': content,
+        'publish': publish
+    }
+
+# endregion
+
+
+def subject_term(
+        term: str,
+        term_type: enums.SubjectTermType,
+        vocabulary_uri: str = '/vocabularies/1',
+        ):
+    """
+    ```
+    {
+        'term': term,
+        'term_type': term_type.value,
+        'vocabulary': vocabulary_uri,
+    }
+    ```
+    """
+    return {
+        'term': term,
+        'term_type': term_type.value,
+        'vocabulary': vocabulary_uri,
+    }
+
+
+def external_document(title: str, location: str, publish=True) -> dict:
+    """
+    ```
+    {
+        'title': title,
+        'location': location,
+        'publish': publish,
+    }
+    ```
+    """
+    return {
+        'title': title,
+        'location': location,
+        'publish': publish,
     }
