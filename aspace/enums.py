@@ -18,7 +18,7 @@ class AgentType(enum.Enum):
 
     PERSON = AgentTypeInfo('agent_person', '/agents/people')
     FAMILY = AgentTypeInfo('agent_family', '/agents/families')
-    CORPORATE_ENTITY = AgentTypeInfo('agent_family', '/agents/families')
+    CORPORATE_ENTITY = AgentTypeInfo('agent_corporate_entity', '/agents/corporate_entities')
     SOFTWARE = AgentTypeInfo('software', '/agents/software')
 
 
