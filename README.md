@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/AustinTSchaffer/ArchivesSpace-Python-Client.svg?branch=master)](https://travis-ci.org/AustinTSchaffer/ArchivesSpace-Python-Client)
 
+[![PyPi version](https://pypip.in/v/aspace-client/badge.png)](https://pypi.org/project/aspace-client/)
+
 The `aspace-client` Python package provides web client functionality that
 targets the API of ArchivesSpace v2.X and up. This package was developed
 to aid ongoing and future ArchivesSpace migrations.
