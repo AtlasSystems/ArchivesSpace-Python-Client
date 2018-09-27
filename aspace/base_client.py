@@ -116,23 +116,30 @@ class BaseASpaceClient(requests.Session):
         for the `authenticate` method.
         """
 
-        counter = 0
+        timer = 0
+        
+        while True:
+            try:
+                if self.get('/').ok:
+                    break
+            except requests.exceptions.ConnectionError:
+                pass
 
-        while not self.get('/').ok:
-            if callable(on_fail): 
-                on_fail()
-                
-            if max_wait_time is not None and counter > max_wait_time:
+            if max_wait_time is not None and timer > max_wait_time:
                 raise ValueError(
                     "The API could not be reached within the maximum allowed "
                     "time."
                 )
 
+            if callable(on_fail):
+                on_fail()
+
             time.sleep(check_interval)
-            counter += check_interval
+            timer += check_interval
 
         if authenticate_on_success:
             self.authenticate()
+
         return self
 
     def authenticate(self):
