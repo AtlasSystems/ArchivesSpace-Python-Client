@@ -36,7 +36,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=[
         'requests>=2.18,<3',
-        'urllib3>=1.19,<2',
+        'urllib3>=1.19,<1.24',
     ],
 
     package_data={},
