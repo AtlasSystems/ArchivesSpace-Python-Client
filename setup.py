@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='aspace-client',
-    version='0.6.4',
+    version='0.6.5',
     description='Provides methods and classes that can be used when interacting with the ArchivesSpace API.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -17,8 +17,7 @@ setup(
     author='Austin T Schaffer',
     author_email='schaffer.austin.t@gmail.com',
     classifiers=[
-        'Development Status :: 4 - Beta',
-        #   5 - Production/Stable
+        'Development Status :: 5 - Production/Stable',
 
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',

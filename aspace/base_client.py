@@ -88,8 +88,13 @@ class BaseASpaceClient(requests.Session):
         Overrides and extends the `prepare_request` function from
         `requests.sessions.Session`.
         """
+        relative_uri = (
+            request.url.lstrip().lstrip('/')
+            if request.url else
+            ''
+        )
 
-        request.url = urllib.parse.urljoin(self.aspace_api_host, request.url)
+        request.url = urllib.parse.urljoin(self.aspace_api_host, relative_uri)
         return super().prepare_request(request)
 
     def wait_until_ready(self, check_interval=5.0, max_wait_time=None,
@@ -151,7 +156,7 @@ class BaseASpaceClient(requests.Session):
         """
 
         resp = self.post(
-            '/users/' + self.aspace_username + '/login',
+            'users/' + self.aspace_username + '/login',
             {'password': self.aspace_password}
         )
 
