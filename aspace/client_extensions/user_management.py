@@ -1,7 +1,11 @@
+import re
 from typing import Union
 
 from aspace import base_client
+from aspace import constants
 from aspace.client_extensions import record_streams
+
+VALID_USER_URI_RE = re.compile(constants.VALID_USER_URI_REGEX)
 
 
 class UserManagement(object):
@@ -42,7 +46,10 @@ class UserManagement(object):
             new_password
         )
 
-        assert password is not None
+        assert (password is not None), (
+            'Unable to create a new password for the current user: "%s"' %
+            user_record['username']
+        )
 
         return self._client.post(
             user_record['uri'],
@@ -75,14 +82,14 @@ class UserManagement(object):
             if (not user['is_admin']) or include_admin
         ]
 
-    def change_password(self, user_uri: str,
+    def change_password(self, user: str,
                         new_password: Union[str, callable],):
         """
         Changes the password for the user specified by the URI. Returns the
         response from the ArchivesSpace server.
 
-        :user_uri: The uri for the user record that will receive the new 
-        password. NOTE: The user record will be downloaded and reuploaded, 
+        :user: The uri or username for the user record that will receive the 
+        new password. NOTE: The user record will be downloaded and reuploaded,
         which will increment the user's lock_version.
 
         :new_password: The new password to set for all users. If a string is
@@ -90,10 +97,18 @@ class UserManagement(object):
         new_password is callable, new_password should accept the user record
         dict and should return a string.
         """
-        return self._change_password(
-            self._client.get(user_uri).json(),
-            new_password,
-        )
+
+        if VALID_USER_URI_RE.match(user):
+            user_record = self._client.get(user).json()
+            return self._change_password(user_record, new_password)
+        
+        user_record = next(filter(
+            lambda u_rec: u_rec['username'] == user,
+            self.stream_user_records()
+        ), None)
+
+        assert user_record, ('Unable to find user: "%s"' % user)
+        return self._change_password(user_record, new_password)
 
     def new_user(self, user: dict, password: str):
         """
