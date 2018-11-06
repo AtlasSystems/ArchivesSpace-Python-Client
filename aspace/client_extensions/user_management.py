@@ -77,9 +77,9 @@ class UserManagement(object):
         return [
             self._change_password(user, new_password)
 
-            for user in self._record_streams.users()
+            for user in self.stream_user_records()
 
-            if (not user['is_admin']) or include_admin
+            if (not user['username'] == 'admin') or include_admin
         ]
 
     def change_password(self, user: str,
@@ -98,9 +98,18 @@ class UserManagement(object):
         dict and should return a string.
         """
 
+        user_record = self.get_user(user)
+        return self._change_password(user_record, new_password)
+
+    def get_user(self, user: str):
+        """
+        Gets a user based on either a URI or a username.
+
+        :user: The uri or username for the user record that will receive the
+        new password.
+        """
         if VALID_USER_URI_RE.match(user):
-            user_record = self._client.get(user).json()
-            return self._change_password(user_record, new_password)
+            return self._client.get(user).json()
         
         user_record = next(filter(
             lambda u_rec: u_rec['username'] == user,
@@ -108,7 +117,7 @@ class UserManagement(object):
         ), None)
 
         assert user_record, ('Unable to find user: "%s"' % user)
-        return self._change_password(user_record, new_password)
+        return user_record
 
     def new_user(self, user: dict, password: str):
         """
