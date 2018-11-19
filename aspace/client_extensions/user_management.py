@@ -121,7 +121,7 @@ class UserManagement(object):
 
     def new_user(self, user: dict, password: str):
         """
-        Creates a new user and returns he response from the server.
+        Creates a new user and returns the response from the server.
 
         :user: A dict representation of a user record. Requires
         ['username'] and ['name'] at a minimum.

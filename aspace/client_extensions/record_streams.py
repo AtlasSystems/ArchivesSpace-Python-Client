@@ -167,8 +167,8 @@ class RecordStreams(object):
         all repositories.
 
         :endpoint_extension: Optional extension to put at the end of each
-        record URI, supporting endpoints such as
-        `/repositories/:repo_id/resources/:id/tree`
+        record URI. For example, adding `'tree/root'` to generate tree uris
+        like `/repositories/:repo_id/resources/:id/tree/root`
         """
 
         return self.repository_records(
@@ -177,18 +177,34 @@ class RecordStreams(object):
             endpoint_extension=endpoint_extension,
         )
 
-    def resource_trees(self, repository_uris: list = None,):
+    def resource_trees(self, repository_uris: list = None,
+                       large_tree_extension: str = None):
         """
-        Streams all resource trees from the ArchivesSpace instance.
+        Streams all resource trees from the ArchivesSpace instance, using the
+        `/repositories/:repo_id/resources/:id/tree` endpoint. The base
+        endpoint is considered deprecated (v2.0.0), but this method has
+        support for pulling from the large-trees endpoints.
 
         :repository_uris: Optional list of repository URIs, which limits the
         records that are downloaded. If omitted, records will be pulled from
         all repositories.
+
+        :large_tree_extension: Optional extension on the tree endpoint. If
+        specified, the text is added to the end of the tree uris:
+        `/repositories/:repo_id/resources/:id/tree/{tree_ext...}`
         """
+
+        endpoint_extension = 'tree'
+
+        if large_tree_extension:
+            endpoint_extension = '%s/%s' % (
+                endpoint_extension,
+                large_tree_extension.lstrip('/ ')
+            )
 
         return self.resources(
             repository_uris=repository_uris,
-            endpoint_extension='tree',
+            endpoint_extension=endpoint_extension
         )
 
     def resource_ordered_records(self, repository_uris: list = None,):
