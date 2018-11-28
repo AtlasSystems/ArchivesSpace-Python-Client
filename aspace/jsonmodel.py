@@ -6,9 +6,6 @@ components of ArchivesSpace's JsonModel objects.
 from aspace import enums
 
 
-# region References
-
-
 def _ref(ref: str):
     """
     ```
@@ -102,10 +99,6 @@ def linked_agent(ref: str, role: enums.LinkedAgentRole, relator: str = None,
     })
 
     return ref
-
-
-# endregion
-# region Notes
 
 
 def abstract_note(persistent_id: str = None, label: str = None, publish=True):
@@ -205,7 +198,24 @@ def subnote_text(content: str, publish=True):
         'publish': publish
     }
 
-# endregion
+
+def subject(source: str, terms: list, vocabulary_uri: str = '/vocabularies/1',
+            **kwargs) -> dict:
+    """
+    {
+        'source': source,
+        'terms': terms,
+        'vocabulary': vocabulary_uri,
+        # ...
+    }
+    """
+    _subject = {
+        'source': source,
+        'terms': terms,
+        'vocabulary': vocabulary_uri,
+    }
+    _subject.update(**kwargs)
+    return _subject
 
 
 def subject_term(term: str, term_type: enums.SubjectTermType,
@@ -221,7 +231,11 @@ def subject_term(term: str, term_type: enums.SubjectTermType,
     """
     return {
         'term': term,
-        'term_type': term_type.value,
+        'term_type': (
+            term_type.value
+            if isinstance(term_type, enums.SubjectTermType) else
+            term_type
+        ),
         'vocabulary': vocabulary_uri,
     }
 

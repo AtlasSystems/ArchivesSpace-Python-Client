@@ -4,5 +4,6 @@ API.
 """
 
 import aspace.enums
+import aspace.jsonmodel
 import aspace.base_client
 import aspace.client
