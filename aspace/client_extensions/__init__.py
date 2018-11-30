@@ -13,3 +13,4 @@ These components can be accessed through the ASpaceClient class.
 import aspace.client_extensions.record_streams
 import aspace.client_extensions.record_pages
 import aspace.client_extensions.user_management
+import aspace.client_extensions.enum_management

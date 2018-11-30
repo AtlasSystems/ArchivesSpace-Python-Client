@@ -40,3 +40,12 @@ class ASpaceClient(base_client.BaseASpaceClient):
         """
 
         return client_extensions.user_management.UserManagement(self)
+
+    def manage_enumerations(self):
+        """
+        Initializes an instance of the EnumManagement extension class, 
+        providing methods that allow batch updates for ArchivesSpace's
+        controlled value lists.
+        """
+
+        return client_extensions.enum_management.EnumManagement(self)
