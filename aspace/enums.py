@@ -6,6 +6,12 @@ AgentTypeInfo = namedtuple('AgentTypeInfo', ['agent_type', 'api_endpoint'])
 
 
 class AgentType(enum.Enum):
+    """
+    Enumeration for the agent_agent_type controlled value list. The values of
+    this enum use the AgentTypeInfo named tuple, wrapping the enumeration
+    value and the API endpoint for the particular agent type.
+    """
+
     # pylint: disable=E1101
     @property
     def agent_type(self) -> str:
@@ -41,8 +47,10 @@ class LinkedAgentRole(enum.Enum):
 
 class LinkedAgentArchivalRecordRelator(enum.Enum):
     r"""
-    Generated from http://localhost:8080/enumerations?id=1 using a terrible
-    jQuery statement.
+    Enumeration for the default values of ArchivesSpace enumeration 1.
+
+    This enumeration was generated from
+    http://localhost:8080/enumerations?id=1 using a terrible jQuery statement.
     """
 
     ACTOR = 'act'
