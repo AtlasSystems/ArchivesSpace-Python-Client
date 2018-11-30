@@ -17,6 +17,8 @@ class ASpaceClient(base_client.BaseASpaceClient):
 
     def page_records(self):
         """
+        NOT CURRENTLY IMPLEMENTED. WILL THROW.
+
         Initializes an instance of the RecordPages extension class, providing
         methods that allow records to be paged from ArchivesSpace.
         """

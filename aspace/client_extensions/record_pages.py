@@ -9,3 +9,4 @@ class RecordPages(object):
 
     def __init__(self, client: base_client.BaseASpaceClient):
         self._client = client
+        raise "Not Implemented"
