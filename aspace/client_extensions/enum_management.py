@@ -24,13 +24,27 @@ class EnumManagement(object):
         """
         return self._client.get('/config/enumerations').json()
 
-    def _get_enumeration_by_id(self, enum_id: int) -> dict:
+    @staticmethod
+    def enumeration_uri(enum_id: Union[int, enums.Enumeration]) -> str:
         """
-        GETs an enumeration (controlled value list) using the
-        /config/enumerations/%i endpoint. For internal use only.
+        Returns a uri of the form `'/config/enumerations/%d'`
         """
-        resp = self._client.get('/config/enumerations/%i' % enum_id)
-        return resp.json()
+        if isinstance(enum_id, enums.Enumeration):
+            return '/config/enumerations/%d' % enum_id.value
+
+        if isinstance(enum_id, int):
+            return '/config/enumerations/%d' % enum_id
+
+        raise 'Invalid value type for parameter enum_id: %s' % repr(enum_id)
+
+    @staticmethod
+    def is_valid_enumeration_uri(enum_uri: str) -> bool:
+        """
+        Returns true if enum_uri matches
+        `aspace.constants.VALID_ENUM_URI_REGEX`.
+        """
+        match = VALID_ENUM_URI_RE.match(enum_uri)
+        return bool(match)
 
     def get_enumeration_by_name(self, enum_name: str) -> dict:
         """
@@ -46,15 +60,12 @@ class EnumManagement(object):
         Gets an enumeration (controlled value list) using the enumeration's
         name, uri, id, or the enumeration specified in the enums module.
         """
-
-        if isinstance(enum_id, enums.Enumeration):
-            return self._get_enumeration_by_id(enum_id.value)
-
-        if isinstance(enum_id, int):
-            return self._get_enumeration_by_id(enum_id)
+        if isinstance(enum_id, (int, enums.Enumeration)):
+            uri = self.enumeration_uri(enum_id)
+            return self._client.get(uri).json()
 
         if isinstance(enum_id, str):
-            if VALID_ENUM_URI_RE.match(enum_id):
+            if self.is_valid_enumeration_uri(enum_id):
                 resp = self._client.get(enum_id)
                 return resp.json()
             return self.get_enumeration_by_name(enum_id)
@@ -67,10 +78,11 @@ class EnumManagement(object):
         Does not return a value, but will fail if any of the HTTP requests
         fail.
         """
+
         enumeration = self.get_enumeration(enum_id)
         sorted_enum_vals = sorted(
             enumeration['enumeration_values'],
-            lambda ev: ev['value']
+            key=lambda ev: ev['value']
         )
 
         for index, enum_val in enumerate(sorted_enum_vals):
@@ -93,10 +105,12 @@ class EnumManagement(object):
 
         `"_1 - Some Value - w/ Formatting..."` -> `"1_some_value_w_formatting"`
         """
+        value = value.lower()
         value = re.sub(r'[^\w]+', '_', value)
         value = value.strip(' _')
         value = re.sub(r'_+', '_', value)
         return value or 'unknown'
+
 
     def update_enumeration(self, enum_id: Union[str, int, enums.Enumeration],
                            new_values: Iterable, cleanup_new_values=True,
@@ -107,10 +121,11 @@ class EnumManagement(object):
         associated with the enumeration, and uploads a list of those results,
         so there are no issues with duplicates.
 
-        Optionally, you can specify whether the new values are run through
-        the convert_to_enumeration_value function, and whether the client
-        should re-order the enumeration after updating.
+        Optionally, you can specify whether or not the new values are run
+        through the convert_to_enumeration_value function, and whether the
+        client should re-order the enumeration after updating.
         """
+
         new_enum_values = set(new_values)
         
         if cleanup_new_values:
@@ -120,9 +135,53 @@ class EnumManagement(object):
             }
 
         enumeration = self.get_enumeration(enum_id)
-        enumeration['values'] = list(new_enum_values.union(enumeration['values']))
+        enumeration['values'] = list(
+            new_enum_values.union(enumeration['values'])
+        )
+
         update_resp = self._client.post(enumeration['uri'], json=enumeration)
         assert update_resp.ok, update_resp.text
 
         if reorder_enumeration:
             self.sort_values(enum_id)
+    
+    def merge_enumeration(self, enum_id: Union[str, int, enums.Enumeration],
+                          from_value: str, to_value: str) -> dict:
+        """
+        Uses the `/config/enumerations/migration` endpoint to merge 2 values
+        under an enumeration (controlled value list). All of the records that
+        currently use the "from_value" will be switched to "to_value", and the
+        "from_value" will be deleted.
+
+        The enum_id parameter can be specified as a uri, id, or by using the
+        Enumeration enum, from the enums module.
+
+        The from_value and to_value parameters should be specified as strings
+        that exactly match values of the specified enumeration.
+
+        Returns the JSON response from the API that is returned when a merge
+        request is attempted.
+        """
+
+        enum_uri = (
+            self.enumeration_uri(enum_id)
+            if isinstance(enum_id, (enums.Enumeration, int)) else
+            enum_id
+            if self.is_valid_enumeration_uri(enum_id) else
+            None
+        )
+
+        assert enum_uri, (
+            'Invalid value for parameter enum_id: %s' % repr(enum_id)
+        )
+
+        resp = self._client.post(
+            '/config/enumerations/migration',
+            json={
+                'enum_uri': enum_uri,
+                'from': from_value,
+                'to': to_value
+            }
+        )
+
+        return resp.json()
