@@ -42,7 +42,6 @@ setup(
     project_urls={
         'Bug Reports': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/issues',
         'Feature Requests': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/issues',
-        'Source': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client',
-        
+        'Source': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client',        
     },
 )
