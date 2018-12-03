@@ -25,6 +25,17 @@ class ASpaceClient(base_client.BaseASpaceClient):
 
         return client_extensions.record_pages.RecordPages(self)
 
+    @property
+    def record_pages(self):
+        """
+        NOT CURRENTLY IMPLEMENTED. WILL THROW.
+
+        Initializes an instance of the RecordPages extension class, providing
+        methods that allow records to be paged from ArchivesSpace.
+        """
+
+        return self.page_records()
+
     def stream_records(self):
         """
         Initializes an instance of the RecordStreams extension class, providing
@@ -32,6 +43,14 @@ class ASpaceClient(base_client.BaseASpaceClient):
         """
 
         return client_extensions.record_streams.RecordStreams(self)
+
+    @property
+    def record_streams(self):
+        """
+        Initializes an instance of the RecordStreams extension class, providing
+        methods that allow records to be streamed from ArchivesSpace.
+        """
+        return self.stream_records()
 
     def manage_users(self):
         """
@@ -41,6 +60,15 @@ class ASpaceClient(base_client.BaseASpaceClient):
 
         return client_extensions.user_management.UserManagement(self)
 
+    @property
+    def user_management(self):
+        """
+        Initializes an instance of the UserManagement extension class, 
+        providing methods that allow batch updates for user records.
+        """
+
+        return self.manage_users()
+
     def manage_enumerations(self):
         """
         Initializes an instance of the EnumManagement extension class, 
@@ -49,3 +77,13 @@ class ASpaceClient(base_client.BaseASpaceClient):
         """
 
         return client_extensions.enum_management.EnumManagement(self)
+
+    @property
+    def enum_management(self):
+        """
+        Initializes an instance of the EnumManagement extension class, 
+        providing methods that allow batch updates for ArchivesSpace's
+        controlled value lists.
+        """
+
+        return self.manage_enumerations()
