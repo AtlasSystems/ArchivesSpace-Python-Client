@@ -55,7 +55,7 @@ class EnumManagement(object):
         return resp.json()
 
     def get_enumeration(self, enum_id: Union[str, int, enums.Enumeration]
-                       ) -> dict:
+                        ) -> dict:
         """
         Gets an enumeration (controlled value list) using the enumeration's
         name, uri, id, or the enumeration specified in the enums module.
@@ -110,7 +110,6 @@ class EnumManagement(object):
         value = value.strip(' _')
         value = re.sub(r'_+', '_', value)
         return value or 'unknown'
-
 
     def update_enumeration(self, enum_id: Union[str, int, enums.Enumeration],
                            new_values: Iterable, cleanup_new_values=True,
