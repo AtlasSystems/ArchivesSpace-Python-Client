@@ -5,6 +5,7 @@ import enum
 from aspace import base_client
 from aspace import enums
 from aspace import constants
+from aspace import util
 
 VALID_ENUM_URI_RE = re.compile(constants.VALID_ENUM_URI_REGEX)
 
@@ -95,21 +96,9 @@ class EnumManagement(object):
     @staticmethod
     def convert_to_enumeration_value(value: str) -> str:
         """
-        Converts a value to the common formatting for an enumeration_value:
-
-        1. all characters are converted to lowercase
-        2. all numbers, letters, and underscores are kept
-        3. all other characters are replaced by underscores
-        4. extra underscores are removed from the ends
-        5. continuous runs of underscore characters are shortened to "_"
-
-        `"_1 - Some Value - w/ Formatting..."` -> `"1_some_value_w_formatting"`
+        Alias for `util.convert_to_enumeration_value`
         """
-        value = value.lower()
-        value = re.sub(r'[^\w]+', '_', value)
-        value = value.strip(' _')
-        value = re.sub(r'_+', '_', value)
-        return value or 'unknown'
+        return util.convert_to_enumeration_value(value)
 
     def update_enumeration(self, enum_id: Union[str, int, enums.Enumeration],
                            new_values: Iterable, cleanup_new_values=True,
@@ -125,7 +114,7 @@ class EnumManagement(object):
         client should re-order the enumeration after updating.
         """
 
-        new_enum_values = set(new_values)
+        new_enum_values = {_ for _ in new_values}
         
         if cleanup_new_values:
             new_enum_values = {
