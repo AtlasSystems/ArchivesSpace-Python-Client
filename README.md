@@ -1,6 +1,6 @@
 # ArchivesSpace Python Client
 
-[![Build Status](https://travis-ci.org/AustinTSchaffer/ArchivesSpace-Python-Client.svg?branch=master)](https://travis-ci.org/AustinTSchaffer/ArchivesSpace-Python-Client) [![PyPi version](https://pypip.in/v/aspace-client/badge.png)](https://pypi.org/project/aspace-client/)
+[![Build Status](https://travis-ci.org/AustinTSchaffer/ArchivesSpace-Python-Client.svg?branch=master)](https://travis-ci.org/AustinTSchaffer/ArchivesSpace-Python-Client)
 
 The `aspace-client` Python package provides web client functionality that
 targets the API of ArchivesSpace v2.X and up. This package was developed
@@ -210,11 +210,27 @@ client.manage_users().change_all_passwords(
 
 ## Installation
 
-This project has a listing on PyPI and can be installed using pip.
+This project no longer has a listing on PyPI. It can be installed using pip,
+targeting this repository.
 
 ```bash
-pip install aspace-client
+pip install git+git://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git#egg=aspace-client
 ```
+
+### Using a Requirements File
+
+Installing this package using a `requirements.txt` file:
+
+```
+# File: requirements.txt
+git+git://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git#egg=aspace-client
+```
+
+```bash
+pip install -r requirements.txt
+```
+
+### For Developers
 
 Below are instructions for installing this package in "editable" mode. This
 will allow you to make changes to the package and test them in real time.
