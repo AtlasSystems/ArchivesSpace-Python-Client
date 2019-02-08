@@ -214,8 +214,14 @@ This project no longer has a listing on PyPI. It can be installed using pip,
 targeting this repository.
 
 ```bash
-pip install git+git://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git#egg=aspace-client
+pip install git+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git
 ```
+
+### Targeting a Specific Release
+
+Targeting a Specific Git Tag (v0.7.2): `git+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git@v0.7.2`
+
+Targeting a Specific Branch: `git+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git@branchname`
 
 ### Using a Requirements File
 
@@ -223,7 +229,7 @@ Installing this package using a `requirements.txt` file:
 
 ```
 # File: requirements.txt
-git+git://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git#egg=aspace-client
+git+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git
 ```
 
 ```bash
