@@ -23,7 +23,7 @@ ArchivesSpace migrations.
 ## Installation
 
 This project no longer has a listing on PyPI. It can be installed using pip,
-targeting this repository.
+targeting this repository. This requires that git is installed.
 
 ```bash
 pip install git+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git
