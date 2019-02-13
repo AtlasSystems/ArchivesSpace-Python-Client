@@ -15,27 +15,6 @@ class ASpaceClient(base_client.BaseASpaceClient):
     API.
     """
 
-    def page_records(self):
-        """
-        NOT CURRENTLY IMPLEMENTED. WILL THROW.
-
-        Initializes an instance of the RecordPages extension class, providing
-        methods that allow records to be paged from ArchivesSpace.
-        """
-
-        return client_extensions.record_pages.RecordPages(self)
-
-    @property
-    def record_pages(self):
-        """
-        NOT CURRENTLY IMPLEMENTED. WILL THROW.
-
-        Initializes an instance of the RecordPages extension class, providing
-        methods that allow records to be paged from ArchivesSpace.
-        """
-
-        return self.page_records()
-
     def stream_records(self):
         """
         Initializes an instance of the RecordStreams extension class, providing
@@ -44,14 +23,6 @@ class ASpaceClient(base_client.BaseASpaceClient):
 
         return client_extensions.record_streams.RecordStreams(self)
 
-    @property
-    def record_streams(self):
-        """
-        Initializes an instance of the RecordStreams extension class, providing
-        methods that allow records to be streamed from ArchivesSpace.
-        """
-        return self.stream_records()
-
     def manage_users(self):
         """
         Initializes an instance of the UserManagement extension class, 
@@ -59,15 +30,6 @@ class ASpaceClient(base_client.BaseASpaceClient):
         """
 
         return client_extensions.user_management.UserManagement(self)
-
-    @property
-    def user_management(self):
-        """
-        Initializes an instance of the UserManagement extension class, 
-        providing methods that allow batch updates for user records.
-        """
-
-        return self.manage_users()
 
     def manage_enumerations(self):
         """
@@ -78,12 +40,11 @@ class ASpaceClient(base_client.BaseASpaceClient):
 
         return client_extensions.enum_management.EnumManagement(self)
 
-    @property
-    def enum_management(self):
+    def query_schemas(self):
         """
-        Initializes an instance of the EnumManagement extension class, 
-        providing methods that allow batch updates for ArchivesSpace's
-        controlled value lists.
+        Initializes an instance of the SchemaQuery extension class, 
+        providing methods that allow schema records to be retrieved
+        through the API.
         """
 
-        return self.manage_enumerations()
+        return client_extensions.schema_query.SchemaQuery(self)
