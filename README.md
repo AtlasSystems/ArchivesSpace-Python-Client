@@ -23,17 +23,17 @@ ArchivesSpace migrations.
 ## Installation
 
 This project no longer has a listing on PyPI. It can be installed using pip,
-targeting this repository. This requires that git is installed.
+targeting the GitHub repository.
 
 ```bash
-pip install git+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git
+pip install https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/zipball/master
 ```
 
 ### Targeting a Specific Release
 
-Targeting a Specific Git Tag (v0.7.2): `git+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git@v0.7.2`
+Targeting a Specific Git Tag (v0.7.2): `https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/zipball/v0.7.2`
 
-Targeting a Specific Branch: `git+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git@branchname`
+Targeting a Specific Branch: `https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git/zipball/branchname`
 
 ### Using a Requirements File
 
@@ -41,7 +41,7 @@ Installing this package using a `requirements.txt` file:
 
 ```
 # File: requirements.txt
-git+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git
+https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/zipball/master
 ```
 
 ```bash
