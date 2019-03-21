@@ -10,7 +10,7 @@ from aspace import util
 VALID_ENUM_URI_RE = re.compile(constants.VALID_ENUM_URI_REGEX)
 
 
-class EnumManagement(object):
+class EnumerationManagementService(object):
     """
     Contains methods that can be used to perform batch updates and formatting
     for enumerations.

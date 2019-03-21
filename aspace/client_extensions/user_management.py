@@ -8,7 +8,7 @@ from aspace.client_extensions import record_streams
 VALID_USER_URI_RE = re.compile(constants.VALID_USER_URI_REGEX)
 
 
-class UserManagement(object):
+class UserManagementService(object):
     """
     Contains methods that can be used to perform batch updates on user records
     using different components of the ArchivesSpace API.

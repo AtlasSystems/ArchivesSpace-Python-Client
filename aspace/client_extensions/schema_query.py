@@ -3,7 +3,7 @@ import re
 from aspace import constants, base_client
 
 
-class SchemaQuery(object):
+class SchemaQueryingService(object):
     """
     Contains methods that can be used to pull information from the `/schemas`
     ArchivesSpace endpoint.

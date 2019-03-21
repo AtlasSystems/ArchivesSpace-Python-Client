@@ -6,7 +6,7 @@ from aspace import constants, base_client
 VALID_REPO_URI_RE = re.compile(constants.VALID_REPO_URI_REGEX)
 
 
-class RecordStreams(object):
+class RecordStreamingService(object):
     """
     Contains methods that can be used to stream all records from an instance
     of ArchivesSpace of a particular record type.

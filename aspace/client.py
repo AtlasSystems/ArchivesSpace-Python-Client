@@ -15,36 +15,53 @@ class ASpaceClient(base_client.BaseASpaceClient):
     API.
     """
 
-    def stream_records(self):
-        """
-        Initializes an instance of the RecordStreams extension class, providing
-        methods that allow records to be streamed from ArchivesSpace.
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._streams = client_extensions.record_streams.RecordStreamingService(self)
+        self._users = client_extensions.user_management.UserManagementService(self)
+        self._enumerations = client_extensions.enum_management.EnumerationManagementService(self)
+        self._schemas = client_extensions.schema_query.SchemaQueryingService(self)
+
+    @property
+    def streams(self) -> client_extensions.record_streams.RecordStreamingService:
         """
 
-        return client_extensions.record_streams.RecordStreams(self)
+        Returns an instance of the RecordStreamingService class, providing
+        methods that allow a more fluent interface for streaming records and
+        URIs from ArchivesSpace, via the ArchivesSpace API.
 
-    def manage_users(self):
         """
-        Initializes an instance of the UserManagement extension class, 
-        providing methods that allow batch updates for user records.
-        """
+        return self._streams
 
-        return client_extensions.user_management.UserManagement(self)
-
-    def manage_enumerations(self):
-        """
-        Initializes an instance of the EnumManagement extension class, 
-        providing methods that allow batch updates for ArchivesSpace's
-        controlled value lists.
+    @property
+    def users(self) -> client_extensions.user_management.UserManagementService:
         """
 
-        return client_extensions.enum_management.EnumManagement(self)
-
-    def query_schemas(self):
+        Returns an instance of the UserManagementService class, providing
+        methods that allow more fluent access to the `/users` endpoint of the
+        ArchivesSpace API.
+        
         """
-        Initializes an instance of the SchemaQuery extension class, 
-        providing methods that allow schema records to be retrieved
-        through the API.
+        return self._users
+
+    @property
+    def enumerations(self) -> client_extensions.enum_management.EnumerationManagementService:
+        """
+        
+        Returns an instance of the EnumerationManagementService class, providing
+        methods that allow more fluent access to managing ArchivesSpace's lists
+        of controlled value.
+
+        """
+        return self._enumerations
+
+    @property
+    def schemas(self) -> client_extensions.schema_query.SchemaQueryingService:
         """
 
-        return client_extensions.schema_query.SchemaQuery(self)
+        Returns an instance of the SchemaQueryingService class, providing
+        methods that allow more fluent read access for ArchivesSpace's JSON
+        model schemas.
+
+        """
+        return self._schemas
