@@ -7,7 +7,7 @@ VALID_USER_URI_REGEX = r'/?users/\d+'
 VALID_ENUM_URI_REGEX = r'/?config/enumerations/\d+'
 
 DEFAULT_PASSWORD_CHARACTER_SET = (
-    'abcdefghijklmnopqrstuvwxyz' +
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
-    '0123456789'
+    'abcdefghijklmnopqrstuvwxyz'
+    + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    + '0123456789'
 )

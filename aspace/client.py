@@ -3,8 +3,12 @@ Contains the ASpaceClient class.
 """
 
 from aspace import base_client
-
-from aspace import client_extensions
+from aspace.client_extensions import (
+    record_streams,
+    user_management,
+    enum_management,
+    schema_query,
+)
 
 
 class ASpaceClient(base_client.BaseASpaceClient):
@@ -17,13 +21,13 @@ class ASpaceClient(base_client.BaseASpaceClient):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._streams = client_extensions.record_streams.RecordStreamingService(self)
-        self._users = client_extensions.user_management.UserManagementService(self)
-        self._enumerations = client_extensions.enum_management.EnumerationManagementService(self)
-        self._schemas = client_extensions.schema_query.SchemaQueryingService(self)
+        self._streams = record_streams.RecordStreamingService(self)
+        self._users = user_management.UserManagementService(self)
+        self._enumerations = enum_management.EnumerationManagementService(self)
+        self._schemas = schema_query.SchemaQueryingService(self)
 
     @property
-    def streams(self) -> client_extensions.record_streams.RecordStreamingService:
+    def streams(self) -> record_streams.RecordStreamingService:
         """
 
         Returns an instance of the RecordStreamingService class, providing
@@ -34,29 +38,29 @@ class ASpaceClient(base_client.BaseASpaceClient):
         return self._streams
 
     @property
-    def users(self) -> client_extensions.user_management.UserManagementService:
+    def users(self) -> user_management.UserManagementService:
         """
 
         Returns an instance of the UserManagementService class, providing
         methods that allow more fluent access to the `/users` endpoint of the
         ArchivesSpace API.
-        
+
         """
         return self._users
 
     @property
-    def enumerations(self) -> client_extensions.enum_management.EnumerationManagementService:
+    def enumerations(self) -> enum_management.EnumerationManagementService:
         """
-        
-        Returns an instance of the EnumerationManagementService class, providing
-        methods that allow more fluent access to managing ArchivesSpace's lists
-        of controlled value.
+
+        Returns an instance of the EnumerationManagementService class,
+        providing methods that allow more fluent access to managing
+        ArchivesSpace's lists of controlled value.
 
         """
         return self._enumerations
 
     @property
-    def schemas(self) -> client_extensions.schema_query.SchemaQueryingService:
+    def schemas(self) -> schema_query.SchemaQueryingService:
         """
 
         Returns an instance of the SchemaQueryingService class, providing
