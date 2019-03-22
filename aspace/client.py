@@ -8,6 +8,7 @@ from aspace.client_extensions import (
     user_management,
     enum_management,
     schema_query,
+    jobs,
 )
 
 
@@ -25,6 +26,7 @@ class ASpaceClient(base_client.BaseASpaceClient):
         self._users = user_management.UserManagementService(self)
         self._enumerations = enum_management.EnumerationManagementService(self)
         self._schemas = schema_query.SchemaQueryingService(self)
+        self._jobs = jobs.JobManagementService(self)
 
     @property
     def streams(self) -> record_streams.RecordStreamingService:
@@ -69,3 +71,13 @@ class ASpaceClient(base_client.BaseASpaceClient):
 
         """
         return self._schemas
+
+    @property
+    def jobs(self) -> jobs.JobManagementService:
+        """
+
+        Returns an instance of the JobManagementService class, providing methods
+        that allow more fluent access to managing ArchivesSpace background jobs.
+
+        """
+        return self._jobs
