@@ -38,7 +38,7 @@ class RecordStreamingService(object):
                 self.repositories()
             ]
         )
-        
+
         def valid_repo_uri(repo_uri):
             return (
                 (type(repo_uri) is str) and VALID_REPO_URI_RE.match(repo_uri)
@@ -125,9 +125,9 @@ class RecordStreamingService(object):
             for uri in self.uris(plural_record_type)
         )
 
-    def repository_records(self, plural_record_type: str,
-                           repository_uris: list = None,
-                           endpoint_extension: str = None,):
+    def repository_relative_records(self, plural_record_type: str,
+                                    repository_uris: list = None,
+                                    endpoint_extension: str = None,):
         """
         Streams all records of a specific type from the ArchivesSpace 
         instance, assuming that a 
@@ -171,7 +171,7 @@ class RecordStreamingService(object):
         like `/repositories/:repo_id/resources/:id/tree/root`
         """
 
-        return self.repository_records(
+        return self.repository_relative_records(
             plural_record_type='resources',
             repository_uris=repository_uris,
             endpoint_extension=endpoint_extension,
@@ -230,7 +230,7 @@ class RecordStreamingService(object):
         all repositories.
         """
 
-        return self.repository_records(
+        return self.repository_relative_records(
             plural_record_type='accessions',
             repository_uris=repository_uris,
         )
@@ -244,7 +244,7 @@ class RecordStreamingService(object):
         all repositories.
         """
 
-        return self.repository_records(
+        return self.repository_relative_records(
             plural_record_type='archival_objects',
             repository_uris=repository_uris,
         )
@@ -306,7 +306,7 @@ class RecordStreamingService(object):
         all repositories.
         """
 
-        return self.repository_records(
+        return self.repository_relative_records(
             plural_record_type='top_containers',
             repository_uris=repository_uris,
         )
