@@ -417,3 +417,21 @@ class Enumeration(enum.Enum):
     NOTE_RIGHTS_STATEMENT_TYPE = 71
     RIGHTS_STATEMENT_EXTERNAL_DOCUMENT_IDENTIFIER_TYPE = 72
     RIGHTS_STATEMENT_OTHER_RIGHTS_BASIS = 73
+
+
+class DataImportTypes(enum.Enum):
+    """
+
+    Specifies the default list of data import types available when creating a
+    new data import job.
+
+    """
+
+    MARCXML_ACCESSION = "marcxml_accession"
+    MARCXML = "marcxml"
+    MARCXML_SUBJECTS_AND_AGENTS = "marcxml_subjects_and_agents"
+    EAD_XML = "ead_xml"
+    EAC_XML = "eac_xml"
+    DIGITAL_OBJECT_CSV = "digital_object_csv"
+    ASSESSMENT_CSV = "assessment_csv"
+    ACCESSION_CSV = "accession_csv"
