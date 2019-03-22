@@ -76,8 +76,9 @@ class ASpaceClient(base_client.BaseASpaceClient):
     def jobs(self) -> jobs.JobManagementService:
         """
 
-        Returns an instance of the JobManagementService class, providing methods
-        that allow more fluent access to managing ArchivesSpace background jobs.
+        Returns an instance of the JobManagementService class, providing
+        methods that allow more fluent access to managing ArchivesSpace
+        background jobs.
 
         """
         return self._jobs
