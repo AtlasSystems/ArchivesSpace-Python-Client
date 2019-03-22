@@ -19,7 +19,7 @@ class EnumerationManagementService(object):
     def __init__(self, client: base_client.BaseASpaceClient):
         self._client = client
 
-    def all_enumerations(self) -> list:
+    def get_all(self) -> list:
         """
         Dowloads a list of all of the controlled value lists.
         """
@@ -47,7 +47,7 @@ class EnumerationManagementService(object):
         match = VALID_ENUM_URI_RE.match(enum_uri)
         return bool(match)
 
-    def get_enumeration_by_name(self, enum_name: str) -> dict:
+    def get_by_name(self, enum_name: str) -> dict:
         """
         GETs an enumeration using the `/config/enumerations/names/:enum_name`
         endpoint.
@@ -55,8 +55,8 @@ class EnumerationManagementService(object):
         resp = self._client.get('/config/enumerations/names/%s' % enum_name)
         return resp.json()
 
-    def get_enumeration(self, enum_id: Union[str, int, enums.Enumeration]
-                        ) -> dict:
+    def get(self, enum_id: Union[str, int, enums.Enumeration]
+            ) -> dict:
         """
         Gets an enumeration (controlled value list) using the enumeration's
         name, uri, id, or the enumeration specified in the enums module.
@@ -69,7 +69,7 @@ class EnumerationManagementService(object):
             if self.is_valid_enumeration_uri(enum_id):
                 resp = self._client.get(enum_id)
                 return resp.json()
-            return self.get_enumeration_by_name(enum_id)
+            return self.get_by_name(enum_id)
 
         raise 'Invalid value type for parameter enum_id %s' % repr(enum_id)
 
@@ -80,7 +80,7 @@ class EnumerationManagementService(object):
         fail.
         """
 
-        enumeration = self.get_enumeration(enum_id)
+        enumeration = self.get(enum_id)
         sorted_enum_vals = sorted(
             enumeration['enumeration_values'],
             key=lambda ev: ev['value']
@@ -115,14 +115,14 @@ class EnumerationManagementService(object):
         """
 
         new_enum_values = {_ for _ in new_values}
-        
+
         if cleanup_new_values:
             new_enum_values = {
                 self.convert_to_enumeration_value(value)
                 for value in new_enum_values
             }
 
-        enumeration = self.get_enumeration(enum_id)
+        enumeration = self.get(enum_id)
         enumeration['values'] = list(
             new_enum_values.union(enumeration['values'])
         )
@@ -132,9 +132,9 @@ class EnumerationManagementService(object):
 
         if reorder_enumeration:
             self.sort_values(enum_id)
-    
-    def merge_enumeration(self, enum_id: Union[str, int, enums.Enumeration],
-                          from_value: str, to_value: str) -> dict:
+
+    def merge(self, enum_id: Union[str, int, enums.Enumeration],
+              from_value: str, to_value: str) -> dict:
         """
         Uses the `/config/enumerations/migration` endpoint to merge 2 values
         under an enumeration (controlled value list). All of the records that
