@@ -1,7 +1,7 @@
 import re
 
 
-def convert_to_enumeration_value(value: str) -> str:
+def convert_to_enumeration_value(value: str, value_if_blank='unknown') -> str:
     """
     Converts a value to the common formatting for an enumeration_value:
 
@@ -17,4 +17,4 @@ def convert_to_enumeration_value(value: str) -> str:
     value = re.sub(r'[^\w]+', '_', value)
     value = value.strip(' _')
     value = re.sub(r'_+', '_', value)
-    return value or 'unknown'
+    return value or value_if_blank
