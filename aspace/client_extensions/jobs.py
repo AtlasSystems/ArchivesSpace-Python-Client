@@ -30,9 +30,9 @@ class JobManagementService(object):
         assert resp.ok, resp.text
         return resp.json()
 
-    def create_with_files(self, repo_uri: str,
-                          import_type: Union[str, enums.DataImportTypes],
-                          filepaths: List[str],) -> dict:
+    def _create_with_files(self, repo_uri: str,
+                           import_type: Union[str, enums.DataImportTypes],
+                           filepaths: List[str],) -> dict:
         """
 
         Creates a new job that operates on a list of input files, taking a list
@@ -40,7 +40,8 @@ class JobManagementService(object):
         (explicit string from `/repositories/:repo_id/jobs/import_types` or
         value from `enums.DataImportTypes`).
 
-        Asserts that the response from 
+        Asserts that the response from the API is a good response, then returns
+        the JSON response.
 
         """
 
@@ -79,3 +80,31 @@ class JobManagementService(object):
 
         assert resp.ok, resp.text
         return resp.json()
+
+    def create_with_files(self, repo_uri: str,
+                          import_type: Union[str, enums.DataImportTypes],
+                          filepaths: List[str],
+                          one_job_per_file: bool = False) -> dict:
+        """
+
+        Creates a new job that operates on a list of input files, taking a list
+        of local file paths. Requires a repository URI and a data import type
+        (explicit string from `/repositories/:repo_id/jobs/import_types` or
+        value from `enums.DataImportTypes`).
+
+        Asserts that the response from the API is a good response, then returns
+        the JSON response.
+
+        If `:one_job_per_file:` is set to true, returns a list of the JSON
+        responses.
+
+        """
+
+        if one_job_per_file:
+            return [
+                self._create_with_files(repo_uri, import_type, [file])
+                for file in
+                filepaths
+            ]
+
+        return self._create_with_files(repo_uri, import_type, filepaths)
