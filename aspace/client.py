@@ -9,6 +9,7 @@ from aspace.client_extensions import (
     enum_management,
     schema_query,
     jobs,
+    top_containers,
 )
 
 
@@ -27,6 +28,9 @@ class ASpaceClient(base_client.BaseASpaceClient):
         self._enumerations = enum_management.EnumerationManagementService(self)
         self._schemas = schema_query.SchemaQueryingService(self)
         self._jobs = jobs.JobManagementService(self)
+        self._top_containers = top_containers.TopContainerManagementService(
+            self
+        )
 
     @property
     def streams(self) -> record_streams.RecordStreamingService:
@@ -82,3 +86,14 @@ class ASpaceClient(base_client.BaseASpaceClient):
 
         """
         return self._jobs
+
+    @property
+    def top_containers(self) -> top_containers.TopContainerManagementService:
+        """
+
+        Returns an instance of the TopContainerManagementService class,
+        providing methods that allow more flient access to managing and
+        querying top containers and the objects they are linked to.
+
+        """
+        return self._top_containers

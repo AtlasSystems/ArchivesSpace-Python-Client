@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='aspace-client',
-    version='2.2.1',
+    version='2.3.0',
     description='Provides methods and classes that can be used when interacting with the ArchivesSpace API.',
     long_description=long_description,
     long_description_content_type='text/markdown',
