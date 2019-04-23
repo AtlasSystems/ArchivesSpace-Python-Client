@@ -155,6 +155,9 @@ class BaseASpaceClient(requests.Session):
         if the HTTP status code was not in the 200 series.
         """
 
+        if constants.X_AS_SESSION in self.headers:
+            del self.headers[constants.X_AS_SESSION]
+
         resp = self.post(
             'users/' + self.aspace_username + '/login',
             {'password': self.aspace_password}
@@ -167,5 +170,5 @@ class BaseASpaceClient(requests.Session):
             )
 
         session = resp.json()['session']
-        self.headers['X-ArchivesSpace-Session'] = session
+        self.headers[constants.X_AS_SESSION] = session
         return resp
