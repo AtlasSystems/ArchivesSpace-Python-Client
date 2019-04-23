@@ -60,7 +60,7 @@ class TopContainerManagementService(object):
         else:
             repo_uri = top_container['repository']['ref']
             tc_uri = top_container['uri']
-        
+
         page_num = 0
         linked_record_uris = set()
 
@@ -91,8 +91,8 @@ class TopContainerManagementService(object):
                 linked_record_uris.add(result['uri'])
 
     def linked_records(self, top_container: Union[str, dict], 
-                           linked_record_type: str = None,
-                           ) -> List[str]:
+                       linked_record_type: str = None,
+                       ) -> List[str]:
         """
         Returns a list of all of the records that are linked to the specified
         top container.
