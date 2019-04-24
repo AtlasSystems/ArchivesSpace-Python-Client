@@ -71,7 +71,11 @@ class EnumerationManagementService(object):
                 return resp.json()
             return self.get_by_name(enum_id)
 
-        raise 'Invalid value type for parameter enum_id %s' % repr(enum_id)
+        raise Exception(
+            'Invalid value type for parameter enum_id: {}'.format(
+                repr(enum_id)
+            )
+        )
 
     def sort_values(self, enum_id: Union[str, int, enums.Enumeration]):
         """
