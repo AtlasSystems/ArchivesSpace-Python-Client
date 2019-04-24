@@ -2,7 +2,7 @@ import aspace
 
 
 client = aspace.client.ASpaceClient(
-    'http://localhost/hoover/api/',
+    'http://localhost/institution/api/',
     'admin', 'admin',
     auto_auth=True
 )
