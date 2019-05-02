@@ -38,9 +38,17 @@ class BaseASpaceClient(requests.Session):
         """
 
         super().__init__()
-        self.aspace_api_host = api_host
+
+        self.aspace_api_host = api_host.strip()
         self.aspace_username = username
         self.aspace_password = password
+
+        # In order to make sure that relative endpoints can be predictably
+        # concatenated onto the end of the base url, the url needs to end in a
+        # slash.
+        if not self.aspace_api_host.endswith('/'):
+            self.aspace_api_host += '/'
+
         self.headers['Accept'] = 'application/json'
 
         if auto_auth:
