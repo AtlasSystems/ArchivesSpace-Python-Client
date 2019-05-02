@@ -123,6 +123,9 @@ class BaseASpaceClient(requests.Session):
         # SESSION_GONE or SESSION_EXPIRED
         if resp.status_code == 412:
             self.authenticate()
+            request.headers[constants.X_AS_SESSION] = (
+                self.headers[constants.X_AS_SESSION]
+            )
             resp = super().send(request, **kwargs)
 
         return resp
