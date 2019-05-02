@@ -36,13 +36,13 @@ class BaseASpaceClient(requests.Session):
         This should be turned off in cases where the implementing program
         needs to wait for the ArchivesSpace instance to spin up.
         """
-        
+
         super().__init__()
         self.aspace_api_host = api_host
         self.aspace_username = username
         self.aspace_password = password
         self.headers['Accept'] = 'application/json'
-        
+
         if auto_auth:
             self.authenticate()
 
@@ -71,10 +71,10 @@ class BaseASpaceClient(requests.Session):
         _self = cls(
             api_host=aspace_credential(
                 'api_host', constants.DEFAULT_API_HOST),
-            
+
             username=aspace_credential(
                 'username', constants.DEFAULT_USERNAME),
-            
+
             password=aspace_credential(
                 'password', constants.DEFAULT_PASSWORD),
 
@@ -96,6 +96,22 @@ class BaseASpaceClient(requests.Session):
 
         request.url = urllib.parse.urljoin(self.aspace_api_host, relative_uri)
         return super().prepare_request(request)
+
+    def send(self, request, **kwargs):
+        """
+        Override of Session.send, adding the ability to reauthenticate and
+        replay the request, in the event that a 412 error is reached. An HTTP
+        response code of 412 from ArchivesSpace indicates either `SESSION_GONE`
+        or `SESSION_EXPIRED`.
+        """
+
+        resp = super().send(request, **kwargs)
+
+        if not resp.ok and resp.status_code == 412:
+            self.authenticate()
+            resp = super().send(request, **kwargs)
+
+        return resp
 
     def wait_until_ready(self, check_interval=5.0, max_wait_time=None,
                          on_fail=None, authenticate_on_success=False):
@@ -122,7 +138,7 @@ class BaseASpaceClient(requests.Session):
         """
 
         timer = 0
-        
+
         while True:
             try:
                 if self.get('/').ok:
