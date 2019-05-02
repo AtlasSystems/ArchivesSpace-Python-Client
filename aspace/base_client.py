@@ -97,8 +97,12 @@ class BaseASpaceClient(requests.Session):
         Overrides and extends the `prepare_request` function from
         `requests.sessions.Session`.
         """
+
+        # In order to make sure that relative endpoints can be predictably
+        # concatenated onto the end of the base url, the relative endpoint
+        # needs to have no leading slashes.
         relative_uri = (
-            request.url.lstrip().lstrip('/')
+            request.url.lstrip(' /')
             if request.url else
             ''
         )
@@ -112,7 +116,7 @@ class BaseASpaceClient(requests.Session):
 
         return super().prepare_request(request)
 
-    def send(self, request, **kwargs):
+    def send(self, request: requests.PreparedRequest, **kwargs):
         """
         Override of Session.send, adding the ability to reauthenticate and
         replay the request, in the event that a 412 error is reached. An HTTP
@@ -122,7 +126,9 @@ class BaseASpaceClient(requests.Session):
 
         resp = super().send(request, **kwargs)
 
-        if not resp.ok and resp.status_code == 412:
+        # Catches any responses that have a code of 412, indicating either
+        # SESSION_GONE or SESSION_EXPIRED
+        if resp.status_code == 412:
             self.authenticate()
             resp = super().send(request, **kwargs)
 
@@ -162,7 +168,7 @@ class BaseASpaceClient(requests.Session):
                 pass
 
             if max_wait_time is not None and timer > max_wait_time:
-                raise ValueError(
+                raise Exception(
                     "The API could not be reached within the maximum allowed "
                     "time."
                 )
@@ -195,11 +201,12 @@ class BaseASpaceClient(requests.Session):
             {'password': self.aspace_password}
         )
 
-        if not resp.ok:
-            raise ValueError(
-                'Received %d while attempting to authenticate: %s' %
-                (resp.status_code, resp.text)
+        assert resp.ok, (
+            'Received {} while attempting to authenticate: {}'.format(
+                resp.status_code,
+                resp.text,
             )
+        )
 
         session = resp.json()['session']
         self._x_as_session = session
