@@ -7,18 +7,17 @@ client = aspace.client.ASpaceClient(
     auto_auth=True
 )
 
-client.manage_enumerations().update_enumeration(
+client.enumerations.update_enumeration(
     aspace.enums.Enumeration.LINKED_AGENT_EVENT_ROLES,
     ['test_value', 'Test value', 'Test value - /', 'RECIPIENT'],
     cleanup_new_values=True, reorder_enumeration=True
 )
 
-laer = (client
-    .manage_enumerations()
-    .get_enumeration(aspace.enums.Enumeration.LINKED_AGENT_EVENT_ROLES)
+l_a_e_r = client.enumerations.get(
+    aspace.enums.Enumeration.LINKED_AGENT_EVENT_ROLES
 )
 
-print(laer['values'])
+print(l_a_e_r['values'])
 
 #  [
 #    "authorizer",
