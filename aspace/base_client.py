@@ -50,6 +50,7 @@ class BaseASpaceClient(requests.Session):
             self.aspace_api_host += '/'
 
         self.headers['Accept'] = 'application/json'
+        self._x_as_session = ''
 
         if auto_auth:
             self.authenticate()
@@ -103,6 +104,12 @@ class BaseASpaceClient(requests.Session):
         )
 
         request.url = urllib.parse.urljoin(self.aspace_api_host, relative_uri)
+
+        # The currently active session token will be attached to any requests
+        # that come through this method.
+        if self._x_as_session:
+            request.headers[constants.X_AS_SESSION] = self._x_as_session
+
         return super().prepare_request(request)
 
     def send(self, request, **kwargs):
@@ -179,8 +186,9 @@ class BaseASpaceClient(requests.Session):
         if the HTTP status code was not in the 200 series.
         """
 
-        if constants.X_AS_SESSION in self.headers:
-            del self.headers[constants.X_AS_SESSION]
+        # Clears out the old session, if there was one. This prevents the
+        # session from being considered whenever the client reauthenticates
+        self._x_as_session = ''
 
         resp = self.post(
             'users/' + self.aspace_username + '/login',
@@ -194,5 +202,6 @@ class BaseASpaceClient(requests.Session):
             )
 
         session = resp.json()['session']
-        self.headers[constants.X_AS_SESSION] = session
+        self._x_as_session = session
+
         return resp
