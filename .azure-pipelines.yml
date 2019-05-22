@@ -21,7 +21,6 @@ steps:
 
 - task: TwineAuthenticate@0
   inputs:
-    artifactFeeds: 'DevgineersPyPI, ArchivesSpace-Migration-Packages'
+    artifactFeeds: 'DevgineersPyPI'
 
-- script: 'python -m twine upload -r ArchivesSpace-Migration-Packages --config-file $(PYPIRC_PATH) dist/*'
 - script: 'python -m twine upload -r DevgineersPyPI --config-file $(PYPIRC_PATH) dist/*'
