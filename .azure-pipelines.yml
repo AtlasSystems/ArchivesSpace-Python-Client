@@ -23,4 +23,5 @@ steps:
   inputs:
     externalFeeds: 'Devgineers PyPI Account'
 
+- script: 'cat $(PYPIRC_PATH)'
 - script: 'python -m twine upload --config-file $(PYPIRC_PATH) dist/*'
