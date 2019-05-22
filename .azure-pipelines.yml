@@ -21,6 +21,6 @@ steps:
 
 - task: TwineAuthenticate@0
   inputs:
-    artifactFeeds: 'DevgineersPyPI'
+    externalFeeds: 'Devgineers PyPI Account'
 
-- script: 'python -m twine upload -r DevgineersPyPI --config-file $(PYPIRC_PATH) dist/*'
+- script: 'python -m twine upload -r "Devgineers PyPI Account" --config-file $(PYPIRC_PATH) dist/*'
