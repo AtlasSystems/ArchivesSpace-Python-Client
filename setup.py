@@ -13,9 +13,9 @@ setup(
     description='Provides methods and classes that can be used when interacting with the ArchivesSpace API.',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client',
-    author='Austin T Schaffer',
-    author_email='schaffer.austin.t@gmail.com',
+    url='https://github.com/AtlasSystems/ArchivesSpace-Python-Client',
+    author='Devgineers @ Atlas Systems Inc.',
+    author_email='devgineers@atlas-sys.com',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
 
@@ -39,8 +39,8 @@ setup(
 
     package_data={},
     project_urls={
-        'Bug Reports': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/issues',
-        'Feature Requests': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/issues',
-        'Source': 'https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client',
+        'Bug Reports': 'https://github.com/AtlasSystems/ArchivesSpace-Python-Client/issues',
+        'Feature Requests': 'https://github.com/AtlasSystems/ArchivesSpace-Python-Client/issues',
+        'Source': 'https://github.com/AtlasSystems/ArchivesSpace-Python-Client',
     },
 )

@@ -1,7 +1,5 @@
 # ArchivesSpace Python Client
 
-[![Build Status](https://travis-ci.org/AustinTSchaffer/ArchivesSpace-Python-Client.svg?branch=master)](https://travis-ci.org/AustinTSchaffer/ArchivesSpace-Python-Client)
-
 The `aspace-client` Python package provides web client functionality that
 targets the API of ArchivesSpace v2.X and up. This package was developed
 to aid ongoing and future ArchivesSpace migrations.
@@ -26,14 +24,14 @@ This project no longer has a listing on PyPI. It can be installed using pip,
 targeting the GitHub repository.
 
 ```bash
-pip install https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/zipball/master
+pip install https://github.com/AtlasSystems/ArchivesSpace-Python-Client/zipball/master
 ```
 
 ### Targeting a Specific Release
 
-Targeting a Specific Git Tag (v0.7.2): `https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/zipball/v0.7.2`
+Targeting a Specific Git Tag (v0.7.2): `https://github.com/AtlasSystems/ArchivesSpace-Python-Client/zipball/v0.7.2`
 
-Targeting a Specific Branch: `https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git/zipball/branchname`
+Targeting a Specific Branch: `https://github.com/AtlasSystems/ArchivesSpace-Python-Client.git/zipball/branchname`
 
 ### Using a Requirements File
 
@@ -41,7 +39,7 @@ Installing this package using a `requirements.txt` file:
 
 ```
 # File: requirements.txt
-https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/zipball/master
+https://github.com/AtlasSystems/ArchivesSpace-Python-Client/zipball/master
 ```
 
 ```bash
@@ -55,7 +53,7 @@ will allow you to make changes to the package and test them in real time.
 
 ```bash
 AS_CLIENT_DIR="/path/to/aspace-client"
-git clone https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client.git "$AS_CLIENT_DIR"
+git clone https://github.com/AtlasSystems/ArchivesSpace-Python-Client.git "$AS_CLIENT_DIR"
 
 # In your python project directory, or in your venv
 pip install -e "$AS_CLIENT_DIR"
@@ -254,18 +252,15 @@ client.manage_users().change_all_passwords(
 ## Contributing
 
 If you have any suggestions or bug reports please feel free to report them in
-[the issues tab](https://github.com/AustinTSchaffer/ArchivesSpace-Python-Client/issues) 
-or email me at [schaffer.austin.t@gmail.com](mailto:schaffer.austin.t@gmail.com).
-Feel free to email me if you are new to Git, but would still like to 
+[the issues tab](https://github.com/AtlasSystems/ArchivesSpace-Python-Client/issues) 
+or email us at [devgineers@atlas-sys.com](mailto:devgineers@atlas-sys.com).
+Feel free to email us if you are new to Git, but would still like to 
 contribute.
 
 Pull requests are welcome, but they will subject to a review process.
 Consistent code style is a goal for this project, as it currently 
-attemps to follow the coding standards layed out in the 
+attempts to follow the coding standards layed out in the 
 [PEP8 Python style guide](https://www.python.org/dev/peps/pep-0008/).
 Please keep this in mind when submitting or requesting contributions,
-but also keep in mind that PEP is a flexible standard and that I'm 
+but also keep in mind that PEP is a flexible standard and that we are 
 willing to make exceptions.
-
-Also, please feel free to call me out on anything currently in this package
-that is poorly styled or just generally bad code. 
