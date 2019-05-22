@@ -2,6 +2,8 @@
 
 [![Build Status](https://atlas-sys.visualstudio.com/Arcadia/_apis/build/status/Python/Packages/AtlasSystems.ArchivesSpace-Python-Client?branchName=master)](https://atlas-sys.visualstudio.com/Arcadia/_build/latest?definitionId=81&branchName=master)
 
+[![PyPI version](https://badge.fury.io/py/aspace-client.svg)](https://badge.fury.io/py/aspace-client)
+
 The `aspace-client` Python package provides web client functionality that
 targets the API of ArchivesSpace v2.X and up. This package was developed
 to aid ongoing and future ArchivesSpace migrations.
@@ -9,46 +11,30 @@ to aid ongoing and future ArchivesSpace migrations.
 
 ## About
 
-The `aspace` module extends the functionality of the `Session` class
-from the `requests` Python library, and attempts to provide access to many of
-ArchivesSpace's commonly used endpoints, while also preserving backwards
+The `aspace` module extends the functionality of the `Session` class from the
+`requests` Python library, and attempts to provide access to all of
+ArchivesSpace's REST API endpoints, while also preserving backwards
 compatibility and supporting development tools such as Pylint. ArchivesSpace
-currently (June 2018) has over 250 API endpoints. Supporting and maintaining
-all of those endpoints is quite an undertaking, so features are being
-prioritized based on their value to performing ongoing ArchivesSpace
-migrations, as well as supporting and researching aspects related to those
-ArchivesSpace migrations.
+currently (May 2019) has over 250 API endpoints. Supporting and maintaining all
+of those endpoints is quite an undertaking, so new features and bug-fixes are
+prioritized based on their value to performing ongoing ArchivesSpace migrations.
 
 
 ## Installation
 
-This project no longer has a listing on PyPI. It can be installed using pip,
-targeting the GitHub repository.
+[This has a listing on PyPI!](https://pypi.org/project/aspace-client/)
+
+```bash
+pip install aspace-client
+```
+
+You can also install this project directly from the GitHub repository:
 
 ```bash
 pip install https://github.com/AtlasSystems/ArchivesSpace-Python-Client/zipball/master
 ```
 
-### Targeting a Specific Release
-
-Targeting a Specific Git Tag (v0.7.2): `https://github.com/AtlasSystems/ArchivesSpace-Python-Client/zipball/v0.7.2`
-
-Targeting a Specific Branch: `https://github.com/AtlasSystems/ArchivesSpace-Python-Client.git/zipball/branchname`
-
-### Using a Requirements File
-
-Installing this package using a `requirements.txt` file:
-
-```
-# File: requirements.txt
-https://github.com/AtlasSystems/ArchivesSpace-Python-Client/zipball/master
-```
-
-```bash
-pip install -r requirements.txt
-```
-
-### For Developers
+## Developer Installation
 
 Below are instructions for installing this package in "editable" mode. This
 will allow you to make changes to the package and test them in real time.
