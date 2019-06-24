@@ -1,7 +1,5 @@
 # ArchivesSpace Python Client
 
-[![Build Status](https://atlas-sys.visualstudio.com/Arcadia/_apis/build/status/Python/Packages/AtlasSystems.ArchivesSpace-Python-Client?branchName=master)](https://atlas-sys.visualstudio.com/Arcadia/_build/latest?definitionId=81&branchName=master)
-
 [![PyPI version](https://badge.fury.io/py/aspace-client.svg)](https://badge.fury.io/py/aspace-client)
 
 The `aspace-client` Python package provides web client functionality that
