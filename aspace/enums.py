@@ -27,7 +27,7 @@ class AgentType(enum.Enum):
     FAMILY = AgentTypeInfo('agent_family', '/agents/families')
 
     CORPORATE_ENTITY = AgentTypeInfo(
-        'agent_corporate_entity', 
+        'agent_corporate_entity',
         '/agents/corporate_entities'
     )
 

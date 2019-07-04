@@ -1,5 +1,5 @@
 r"""
-This module contains classes that leverage existing endpoints of the 
+This module contains classes that leverage existing endpoints of the
 ArchivesSpace API to extend its functionality. Examples of the types
 of utilities included in this package are
 

@@ -38,7 +38,7 @@ class TopContainerManagementService(object):
         """
         return self._client.get(tc_uri).json()
 
-    def linked_record_uris(self, top_container: Union[str, dict], 
+    def linked_record_uris(self, top_container: Union[str, dict],
                            linked_record_type: str = None,
                            ) -> List[str]:
         """
@@ -73,7 +73,7 @@ class TopContainerManagementService(object):
                     'type': linked_record_type,
                     'filter': json.dumps({
                         'query': {
-                            'jsonmodel_type': 'field_query', 
+                            'jsonmodel_type': 'field_query',
                             'field': 'top_container_uri_u_sstr',
                             'value': tc_uri,
                         }
@@ -90,7 +90,7 @@ class TopContainerManagementService(object):
             for result in results:
                 linked_record_uris.add(result['uri'])
 
-    def linked_records(self, top_container: Union[str, dict], 
+    def linked_records(self, top_container: Union[str, dict],
                        linked_record_type: str = None,
                        ) -> List[str]:
         """

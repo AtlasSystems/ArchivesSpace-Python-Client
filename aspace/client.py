@@ -15,7 +15,7 @@ from aspace.client_extensions import (
 
 class ASpaceClient(base_client.BaseASpaceClient):
     """
-    Wraps the Session class from the requests package. Extends the 
+    Wraps the Session class from the requests package. Extends the
     functionality of the BaseASpaceClient, by including instances
     of classes that leverage multiple endpoints of the ArchivesSpace
     API.

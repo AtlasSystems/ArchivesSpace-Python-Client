@@ -13,7 +13,7 @@ from aspace import constants
 class BaseASpaceClient(requests.Session):
     """
     Extends the Session class from the requests Python library, adding
-    methods that relate to 
+    methods that abstract ArchivesSpace-specific functionality.
     """
 
     def __init__(self, api_host: str = constants.DEFAULT_API_HOST,
@@ -23,7 +23,7 @@ class BaseASpaceClient(requests.Session):
         """
         Initializes a new ArchivesSpace client.
 
-        :api_host: Url used to connect to the API of the ArchivesSpace 
+        :api_host: Url used to connect to the API of the ArchivesSpace
         instance. Trailing slashes are not required.
 
         :username: Username of an ASpace user account that has access
@@ -55,7 +55,7 @@ class BaseASpaceClient(requests.Session):
             self.authenticate()
 
     @classmethod
-    def init_from_config(cls, config: configparser.ConfigParser, 
+    def init_from_config(cls, config: configparser.ConfigParser,
                          section='aspace_credentials', auto_auth=False):
         """
         Initializes an instance of any subclass of BaseASpaceClient from an
@@ -64,7 +64,7 @@ class BaseASpaceClient(requests.Session):
         of the specified `config`. If any are not set, the initializer will
         use defaults from the `constants` module.
 
-        `"api_host"`: Url used to connect to the API of the ArchivesSpace 
+        `"api_host"`: Url used to connect to the API of the ArchivesSpace
         instance. Trailing slashes are not required.
 
         `"username"`: Username of an ASpace user account that has access
@@ -138,15 +138,15 @@ class BaseASpaceClient(requests.Session):
 
         Returns a reference to self once finished.
 
-        :check_interval: Specifies the number of seconds in between each 
+        :check_interval: Specifies the number of seconds in between each
         check. Can be a non-integer interval of seconds. Defaults to 5.
 
         :max_wait_time: Specifies the maximum number of seconds that the
         function will wait until raising a ValueError. Optional, if `None`,
         then the function will wait indefinitely.
 
-        :on_fail: If callable, will execute after every attempt, before 
-        initiating the wait. Intended to be used for writing to the 
+        :on_fail: If callable, will execute after every attempt, before
+        initiating the wait. Intended to be used for writing to the
         program's logs.
 
         :authenticate_on_success: If True, the client will attempt to

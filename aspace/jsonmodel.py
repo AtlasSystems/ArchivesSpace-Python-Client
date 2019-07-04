@@ -38,7 +38,7 @@ def instance_sub_container(instance_type: str, ref: str,
     }
     ```
     """
-    
+
     sub_container = {
         'top_container': _ref(ref)
     }
@@ -80,13 +80,13 @@ def linked_agent(ref: str, role: enums.LinkedAgentRole, relator: str = None,
         'role': role.value or role,
         'relator': relator,
         'terms': terms,
-        'title': title,        
+        'title': title,
     }
     ```
     """
 
     ref = _ref(ref)
-    
+
     ref.update({
         'role': (
             role.value
@@ -136,7 +136,7 @@ def note_singlepart(note_type: str, content: list, persistent_id: str = None,
         label=label,
         publish=publish,
     )
-    
+
     note.update({
         'type': note_type,
         'jsonmodel_type': 'note_singlepart',
@@ -161,24 +161,24 @@ def note_multipart(note_type: str, subnotes: list, persistent_id: str = None,
     Note: If the contents of subnotes are not dicts, then each will be mapped
     using the `subnote_text` jsonmodel template.
     """
-    
+
     note = abstract_note(
         persistent_id=persistent_id,
         label=label,
         publish=publish,
     )
-    
+
     note.update({
         'type': note_type,
         'jsonmodel_type': 'note_multipart',
         'subnotes': list(map(
-            lambda note: 
-                note if isinstance(note, dict) else 
+            lambda note:
+                note if isinstance(note, dict) else
                 subnote_text(note),
             subnotes,
         ))
     })
-    
+
     return note
 
 

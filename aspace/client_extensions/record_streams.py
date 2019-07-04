@@ -87,7 +87,7 @@ class RecordStreamingService(object):
         all repositories.
 
         :endpoint_extension: Optional extension to put at the end of each
-        record URI. For example, specifying 'resources' and 
+        record URI. For example, specifying 'resources' and
         endpoint_extension='tree' supports the
         '/repositories/:repo_id/resources/:id/tree' endpoint.
         """
@@ -129,8 +129,8 @@ class RecordStreamingService(object):
                                     repository_uris: list = None,
                                     endpoint_extension: str = None,):
         """
-        Streams all records of a specific type from the ArchivesSpace 
-        instance, assuming that a 
+        Streams all records of a specific type from the ArchivesSpace
+        instance, assuming that a
         `/repositories/:repo_id/:plural_record_type` endpoint
         exists, and supports the `all_ids=true` parameter.
 
@@ -142,7 +142,7 @@ class RecordStreamingService(object):
         all repositories.
 
         :endpoint_extension: Optional extension to put at the end of each
-        record URI. For example, specifying 'resources' and 
+        record URI. For example, specifying 'resources' and
         endpoint_extension='tree' supports the
         '/repositories/:repo_id/resources/:id/tree' endpoint.
         """
@@ -157,7 +157,7 @@ class RecordStreamingService(object):
             )
         )
 
-    def resources(self, repository_uris: list = None, 
+    def resources(self, repository_uris: list = None,
                   endpoint_extension: str = None,):
         """
         Streams all resources from the ArchivesSpace instance.

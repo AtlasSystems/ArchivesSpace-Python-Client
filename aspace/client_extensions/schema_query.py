@@ -22,10 +22,10 @@ class SchemaQueryingService(object):
 
         Caches the result if a schema is found.
         """
-        
+
         if schema_name in self._schema_cache:
             return self._schema_cache[schema_name]
-        
+
         resp = self._client.get('/schemas/{}'.format(schema_name))
         assert resp.ok, resp.text
 
