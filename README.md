@@ -20,7 +20,7 @@ prioritized based on their value to performing ongoing ArchivesSpace migrations.
 
 ## Installation
 
-[This has a listing on PyPI!](https://pypi.org/project/aspace-client/)
+[This project has a listing on PyPI!](https://pypi.org/project/aspace-client/)
 
 ```bash
 pip install aspace-client
@@ -31,6 +31,7 @@ You can also install this project directly from the GitHub repository:
 ```bash
 pip install https://github.com/AtlasSystems/ArchivesSpace-Python-Client/zipball/master
 ```
+
 
 ## Developer Installation
 
