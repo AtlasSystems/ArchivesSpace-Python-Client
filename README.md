@@ -96,7 +96,6 @@ In app.py:
 
 ```python
 import configparser
-
 import aspace
 
 config = configparser.ConfigParser()
@@ -164,75 +163,42 @@ extensions to ArchivesSpace's API functionality that are currently provided.
 ### Streaming Records
 
 ```python
-# Manage your resource records one at a time, no matter how many you have
-for resource in client.stream_records().resources():
+# Cleanup your resource records one at a time, no matter how many you have
+for resource in client.streams.resources():
     if resource['title'].endswith('!'):
-        # Remove trailing spaces and 
         print('Cleaning Resource:', resource['uri'], resource['title'])
         resource['title'] = resource['title'].rstrip('!')
         update_result = client.post(resource['uri'], json=resource).json()
         print(update_result)
 
 # Works for accessions and agents
-client.stream_records().accessions()
-client.stream_records().people()
-client.stream_records().corporate_entities()
-client.stream_records().families()
-client.stream_records().software()
-client.stream_records().all_agents()
+client.streams.accessions()
+client.streams.people()
+client.streams.corporate_entities()
+client.streams.families()
+client.streams.software()
+client.streams.all_agents()
 
 
 # Works for endpoints that do not have an explicitly defined stream method
-client.stream_records().records('container_profiles'):
+client.streams.records('container_profiles'):
     pass
 
 # Works for endpoints that do not have an explicitly defined stream method
 # and require a repository reference in the URI.
-for assessment in client.stream_records().repository_records('assessments'):
+for assessment in client.streams.repository_relative_records('assessments'):
     pass
 
 # Optional limits can be placed on record streams, so that only 1 repository
 # is considered, as opposed to streaming all records from all repositories,
 # which is default.
-assessments_stream = client.stream_records().repository_records(
+assessments_stream = client.streams.repository_relative_records(
     'assessments',
     repository_uris=['/repositories/2']
 )
 
 for assessment in assessments_stream:
     pass
-```
-
-### User Management
-
-```python
-# Change all of your user's passwords to "something really complicated"
-client.manage_users().change_all_passwords(
-    'pa$$w0rd',
-    include_admin=True
-)
-
-# Randomize all of your non-admin user's passwords
-import string
-import random
-
-def random_password():
-    return ''.join(
-        random.choice(string.ascii_uppercase + string.digits)
-        for _ in range(25)
-    )
-
-# The same password for every user
-client.manage_users().change_all_passwords(
-    new_password=random_password(),
-    include_admin=False,
-)
-
-# Different password for every user
-client.manage_users().change_all_passwords(
-    new_password=lambda user: random_password(),
-    include_admin=False,
-)
 ```
 
 
