@@ -312,6 +312,24 @@ class RecordStreamingService(object):
         )
 
     def subjects(self):
+        """
+        Streams all subject records from the ArchivesSpace instance.
+        """
+
         return self.records(
             plural_record_type='subjects'
+        )
+
+    def jobs(self, repository_uris: list = None,):
+        """
+        Streams all job records from the ArchivesSpace instance.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+        """
+
+        return self.repository_relative_records(
+            plural_record_type="jobs",
+            repository_uris=repository_uris,
         )

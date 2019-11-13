@@ -3,7 +3,7 @@ import json
 import os
 from typing import Union, List, Dict
 
-from aspace import constants, base_client, enums
+from aspace import constants, base_client, enums, client_extensions
 
 
 class JobManagementService(object):
@@ -13,6 +13,9 @@ class JobManagementService(object):
 
     def __init__(self, client: base_client.BaseASpaceClient):
         self._client = client
+        self._record_streams = (
+            client_extensions.record_streams.RecordStreamingService(client)
+        )
 
     def import_types(self, repo_uri) -> List[dict]:
         """
@@ -164,3 +167,182 @@ class JobManagementService(object):
             import_type=import_type,
             files=_files
         )
+
+    @staticmethod
+    def _to_uri(job) -> str:
+        """
+        :job: Either a job's URI or the JSON representation of a job as a dict.
+        """
+
+        uri = (
+            job if isinstance(job, str) else
+            job.get('uri', None) if isinstance(job, dict) else
+            None
+        )
+
+        if not uri:
+            raise ValueError('Format of job parameter not recognized')
+
+        return uri
+
+    def get_output_files(self, job: Union[str, dict]) -> list:
+        """
+        Gets a list of a job's output files.
+
+        :job: Either a job's URI or the JSON representation of a job as a dict.
+        """
+
+        uri = JobManagementService._to_uri(job)
+        resp = self._client.get('{}/output_files'.format(uri))
+        assert resp.ok, resp.text
+        return resp.json()
+
+    def get_log(self, job: Union[str, dict]) -> list:
+        """
+        Gets a job's output log.
+
+        :job: Either a job's URI or the JSON representation of a job as a dict.
+        """
+
+        uri = JobManagementService._to_uri(job)
+        resp = self._client.get('{}/log'.format(uri))
+        assert resp.ok, resp.text
+        return resp.text
+
+    def get(self, job: Union[str, dict]) -> dict:
+        """
+        Gets a job.
+
+        :job: Either a job's URI or the JSON representation of a job as a dict.
+        """
+
+        uri = JobManagementService._to_uri(job)
+        resp = self._client.get(uri)
+        assert resp.ok, resp.text
+        return resp.json()
+
+    def cancel(self, job: Union[str, dict]) -> dict:
+        """
+        Cancels a job.
+
+        :job: Either a job's URI or the JSON representation of a job as a dict.
+        """
+
+        uri = JobManagementService._to_uri(job)
+        resp = self._client.post('{}/cancel'.format(uri))
+        assert resp.ok, resp.text
+        return resp.json()
+
+    def delete(self, job: Union[str, dict]) -> dict:
+        """
+        Deletes a job.
+
+        :job: Either a job's URI or the JSON representation of a job as a dict.
+        """
+
+        uri = JobManagementService._to_uri(job)
+        resp = self._client.delete(uri)
+        assert resp.ok, resp.text
+        return resp.json()
+
+    def get_active(self, repository_uris: list = None,) -> List[dict]:
+        """
+        Gets a list of all the job records from the ArchivesSpace instance that
+        have a status of "running" or "queued". Can be limitied to a set of
+        repositories.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+        """
+        return self.get_by_status(
+            status=[
+                enums.JobStatus.RUNNING,
+                enums.JobStatus.QUEUED,
+            ],
+            repository_uris=repository_uris
+        )
+
+    def get_archived(self, repository_uris: list = None,) -> List[dict]:
+        """
+        Gets a list of all the job records from the ArchivesSpace instance that
+        are either completed, cancelled, or failed. Can be limitied to a set of
+        repositories.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+        """
+        return self.get_by_status(
+            status=[
+                enums.JobStatus.COMPLETED,
+                enums.JobStatus.CANCELED,
+                enums.JobStatus.FAILED,
+            ],
+            repository_uris=repository_uris
+        )
+
+    def get_completed(self, repository_uris: list = None,) -> List[dict]:
+        """
+        Gets a list of all the job records from the ArchivesSpace instance that
+        have a status of "completed". Can be limitied to a set of repositories.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+        """
+        return self.get_by_status(
+            status=[
+                enums.JobStatus.COMPLETED,
+            ],
+            repository_uris=repository_uris
+        )
+
+    def get_failed(self, repository_uris: list = None,) -> List[dict]:
+        """
+        Gets a list of all the job records from the ArchivesSpace instance that
+        have a status of "failed". Can be limitied to a set of repositories.
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+        """
+        return self.get_by_status(
+            status=[
+                enums.JobStatus.FAILED,
+            ],
+            repository_uris=repository_uris
+        )
+
+    def get_by_status(self, status, repository_uris: list = None,) -> List[dict]:
+        """
+        Gets a list of all the job records from the ArchivesSpace instance that
+        match the input status. Can be limitied to a set of repositories.
+
+        :status: Can be a value from the `enums.JobStatus` enumeration, a
+        string value, or a list containing values of either type. This will
+        filter the list of jobs based on each job's status property.fail
+
+        :repository_uris: Optional list of repository URIs, which limits the
+        records that are downloaded. If omitted, records will be pulled from
+        all repositories.
+        """
+        statuses = [
+            (
+                _status.value if isinstance(_status, enums.JobStatus) else
+                _status
+            )
+            for _status in
+            (
+                [status] if isinstance(status, str) else
+                [status] if isinstance(status, enums.JobStatus) else
+                status
+            )
+        ]
+
+        jobs = []
+        for job in self._record_streams.jobs(repository_uris=repository_uris):
+            if job["status"] in statuses:
+                jobs.append(job)
+
+        return jobs

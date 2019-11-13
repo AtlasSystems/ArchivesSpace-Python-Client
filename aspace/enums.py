@@ -435,3 +435,16 @@ class DataImportTypes(enum.Enum):
     DIGITAL_OBJECT_CSV = "digital_object_csv"
     ASSESSMENT_CSV = "assessment_csv"
     ACCESSION_CSV = "accession_csv"
+
+class JobStatus(enum.Enum):
+    """
+
+    Specifies the possible states of a background job's status.
+
+    """
+
+    RUNNING = "running"
+    COMPLETED = "completed"
+    CANCELED = "canceled"
+    QUEUED = "queued"
+    FAILED = "failed"
